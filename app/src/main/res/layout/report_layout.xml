@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="UselessParent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="巡检报告"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText,SpUsage" />
+        <ListView
+            android:layout_below="@id/title"
+            android:id="@+id/list_item"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="180dp">
+        </ListView>
+            <TextView
+                android:layout_below="@id/list_item"
+                android:id="@+id/describe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="故障描述："
+                android:textSize="20dp"
+                android:layout_marginLeft="20dp"
+                tools:ignore="HardcodedText,SpUsage" />
+
+
+            <EditText
+                android:id="@+id/describe_text"
+                android:layout_below="@id/describe"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:minLines="8"
+                android:maxLines="10"
+                android:enabled="true"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
+                tools:ignore="ContentDescription,NestedScrolling"
+                android:background="@drawable/edit_bg"/>
+
+            <TextView
+                android:layout_below="@id/describe_text"
+                android:id="@+id/image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="图片展示："
+                android:textSize="20dp"
+                android:layout_marginLeft="20dp"
+                tools:ignore="HardcodedText,SpUsage" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/image"
+            android:overScrollMode="never" />
+        <TextView
+            android:layout_below="@id/recycler"
+            android:id="@+id/people"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="巡检人员："
+            android:textSize="20dp"
+            android:layout_marginLeft="20dp"
+            tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+
+        <GridView
+            android:id="@+id/grid_check"
+            android:layout_below="@id/people"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:stretchMode="columnWidth"
+            android:numColumns="3">
+
+        </GridView>
+
+        <Button
+            android:id="@+id/Submit"
+            android:layout_below="@id/grid_check"
+            android:layout_marginTop="60dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="提交"
+            tools:ignore="HardcodedText" />
+        </RelativeLayout>
+   </ScrollView>
+</RelativeLayout>

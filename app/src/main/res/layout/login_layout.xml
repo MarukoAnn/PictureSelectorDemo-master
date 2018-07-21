@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_login"
+    tools:context="com.yechaoa.pictureselectordemo.Activity.LoginActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        tools:ignore="UselessParent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            tools:ignore="UselessParent">
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_marginTop="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@drawable/edit_bg4"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                tools:ignore="RtlHardcoded">
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_user"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/edit_bg4"
+                    tools:ignore="ContentDescription" />
+
+                <EditText
+                    android:id="@+id/login_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/edit_bg4"
+                    android:hint="请输入账号"
+                    android:textColorHint="#9d9ea2"
+                    android:textColor="#ffffff"
+                    tools:ignore="HardcodedText,TextFields" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_marginTop="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:background="@drawable/edit_bg4"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                tools:ignore="RtlHardcoded">
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_pswd"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/edit_bg4"
+                    tools:ignore="ContentDescription" />
+                <EditText
+                    android:id="@+id/login_psw"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/edit_bg4"
+                    android:hint="请输入密码"
+                    android:textColorHint="#9d9ea2"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#ffffff"
+                    android:inputType="textPassword"
+                    android:cursorVisible="false"
+                    tools:ignore="HardcodedText,TextFields"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/login_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="90dp"
+                android:layout_marginRight="90dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/login_btn"
+                android:text="登    录"
+                android:textColor="#ffffff"
+                android:textSize="25dp"
+                android:gravity="center"
+                tools:ignore="HardcodedText,SpUsage" />
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:text="忘记密码 ？"
+                    android:textColor="#dee0df"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                android:layout_width="80dp"
+                android:layout_height="2dp"
+                android:background="#dee0df"
+                android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
