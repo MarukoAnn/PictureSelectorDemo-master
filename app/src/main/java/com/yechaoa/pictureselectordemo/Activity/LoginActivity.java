@@ -148,7 +148,7 @@ public class LoginActivity extends Activity {
     public void ViewLayout() {
         login_btn = (Button) findViewById(R.id.login_btn);
         username = (EditText) findViewById(R.id.login_user);
-        password = (EditText) findViewById(R.id.login_psw);
+        password = (EditText) findViewById(R.id.login_pass);
     }
 
     public void init() {
@@ -197,7 +197,7 @@ public class LoginActivity extends Activity {
 
         Ldata.setUname(uname);
         Ldata.setUpwd(upsd);
-        Ldata.setModule("AN2");
+        Ldata.setModule("AN6");
         Gson gson = new Gson();
         String json = gson.toJson(Ldata);//将其转换为JSON数据格式
 

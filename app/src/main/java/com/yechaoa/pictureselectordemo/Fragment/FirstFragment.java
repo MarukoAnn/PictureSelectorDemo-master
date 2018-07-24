@@ -17,14 +17,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.yechaoa.pictureselectordemo.Activity.MainActivity;
 import com.yechaoa.pictureselectordemo.Activity.PhotoActivity;
 import com.yechaoa.pictureselectordemo.Activity.ScanActivity;
 
@@ -36,15 +33,13 @@ import com.yechaoa.pictureselectordemo.R;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+
 
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -73,9 +68,11 @@ public class FirstFragment extends Fragment {
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.gasFragment");    //只有持有相同的action的接受者才能接收此广播
         activity.registerReceiver(receiveBroadCast, filter);
-
         super.onAttach(activity);
+        activity.unregisterReceiver(receiveBroadCast);//LS:重点！
     }
+
+
 
     class ReceiveBroadCast extends BroadcastReceiver {
         @Override
@@ -138,8 +135,8 @@ public class FirstFragment extends Fragment {
         dbHepler = new DataDBHepler(getContext());
 //        initView();
 //        Time();
-        ImageView imageView = (ImageView)view.findViewById(R.id.saoma_btn);
-        imageView.setOnClickListener(new View.OnClickListener() {
+        Button button = (Button)view.findViewById(R.id.saoma_btn);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 IntentIntegrator integrator =new IntentIntegrator(getActivity());
@@ -153,13 +150,8 @@ public class FirstFragment extends Fragment {
                 integrator.initiateScan();
             }
         });
-        ImageView btnClickthree = (ImageView) view.findViewById(R.id.imageView3);
-        btnClickthree.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getActivity(), "暂无其他添加项", Toast.LENGTH_SHORT).show();
-            }
-        });
+
+
         return view;
     }
 

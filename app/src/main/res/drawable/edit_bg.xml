@@ -12,13 +12,13 @@
                 <!--android:endColor="#e4e5e7"-->
                 <!--android:startColor="#c1c5c8"/>-->
             <solid
-                android:color="#FFFFFF"/>
+                android:color="#e5e1d5"/>
             <corners
                 android:radius="1dip"
                 />
             <stroke
                 android:width="1px"
-                android:color="#000000"/>
+                android:color="#e5e1d5"/>
         </shape>
     </item>
 </layer-list>

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
-android:layout_height="56dp"
+android:layout_height="30dp"
 android:background="#000000"
 android:orientation="horizontal">
 <TextView
@@ -10,8 +10,8 @@ android:orientation="horizontal">
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
-    android:text="开始巡检"
-    android:textSize="25dp"
-    android:textColor="#ff661a"
-    tools:ignore="HardcodedText" />
+    android:text="用户登陆"
+    android:textSize="20dp"
+    android:textColor="#fe6718"
+    tools:ignore="HardcodedText,SpUsage" />
 </RelativeLayout>

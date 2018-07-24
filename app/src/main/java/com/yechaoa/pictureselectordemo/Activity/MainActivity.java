@@ -1,14 +1,17 @@
 package com.yechaoa.pictureselectordemo.Activity;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.os.Bundle;
 import android.os.Handler;
 
+import android.os.Looper;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.util.Log;
@@ -28,9 +31,13 @@ import com.google.zxing.integration.android.IntentResult;
 import com.yechaoa.pictureselectordemo.Fragment.FirstFragment;
 import com.yechaoa.pictureselectordemo.Fragment.SecondFragment;
 
+import com.yechaoa.pictureselectordemo.Modle.SidSelectData;
 import com.yechaoa.pictureselectordemo.R;
+import com.yechaoa.pictureselectordemo.Util.DataDBHepler;
+import com.yechaoa.pictureselectordemo.Util.SpostupdateHttp;
 
-
+import java.util.ArrayList;
+import static android.content.ContentValues.TAG;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -56,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String index;
     //    final Handler handler = new Handler();
 //    private int TIME = 370000;  //每隔1s执行一次.
-//    String path = "http://120.78.137.182/element-admin/user/sid-update";
+    String path = "http://120.78.137.182/element-admin/user/sid-update";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,22 +82,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-//    public void showNoProject(){
-//        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
-//                .setMessage("身份验证已失效，请重新登录!")
-//                .setPositiveButton("确认", new DialogInterface.OnClickListener(){
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        Intent intent = new Intent();
-//                        intent.setClass(MainActivity.this,LaunchActivity.class);
-//                        startActivity(intent);
-//                        dialog.dismiss();
-//
-//                    }
-//                });
-//        builder.setCancelable(false);
-//        builder.show();
-//    }
+    public void showNoProject(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+                .setMessage("身份验证已失效，请重新登录!")
+                .setPositiveButton("确认", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent();
+                        intent.setClass(MainActivity.this,LaunchActivity.class);
+                        startActivity(intent);
+                        dialog.dismiss();
+
+                    }
+                });
+        builder.setCancelable(false);
+        builder.show();
+    }
 
     /**
      * 初始化页面
@@ -104,33 +111,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         firstLayout.setOnClickListener(MainActivity.this);
         secondLayout.setOnClickListener(MainActivity.this);
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Looper.prepare();
-//                try {
-//                    DataDBHepler dataDBHepler = new DataDBHepler(getBaseContext());
-//                    ArrayList<SidSelectData> DataList = dataDBHepler.FindSidData();
-//                    final SidSelectData data = new SidSelectData(DataList.get(0).getId(),DataList.get(0).getSid());
-//                    String Msid = data.getSid();//获取数据库里的sid
-//
-//                    SpostupdateHttp spostupdateHttp = new SpostupdateHttp();
-//                    String result = spostupdateHttp.posthttpresult(Msid,path);
-//                    if (result.equals("13"))
-//                    {
-//                        showNoProject();
-//                        dataDBHepler = new DataDBHepler(getBaseContext());
-//                        dataDBHepler.delete("1");
-//                    }
-//                    else {
-//                        Log.i(TAG,"用户在线");
-//                    }
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//                Looper.loop();
-//            }
-//        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                try {
+                    DataDBHepler dataDBHepler = new DataDBHepler(getBaseContext());
+                    ArrayList<SidSelectData> DataList = dataDBHepler.FindSidData();
+                    final SidSelectData data = new SidSelectData(DataList.get(0).getId(),DataList.get(0).getSid());
+                    String Msid = data.getSid();//获取数据库里的sid
+
+                    SpostupdateHttp spostupdateHttp = new SpostupdateHttp();
+                    String result = spostupdateHttp.posthttpresult(Msid,path);
+                    if (result.equals("13"))
+                    {
+                        showNoProject();
+                        dataDBHepler = new DataDBHepler(getBaseContext());
+                        dataDBHepler.delete("1");
+                    }
+                    else {
+                        Log.i(TAG,"用户在线");
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                Looper.loop();
+            }
+        }).start();
     }
 
     @Override

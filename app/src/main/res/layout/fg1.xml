@@ -3,64 +3,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3abdb7"
+    android:background="#e5e1d5"
     tools:context="com.yechaoa.pictureselectordemo.Activity.LoginActivity">
     <include
         android:id="@+id/show_mainfg1_title"
         layout="@layout/fg1_title" />
-        <LinearLayout
-            android:layout_below="@id/show_mainfg1_title"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            tools:ignore="Orientation,RtlHardcoded,UselessParent">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingRight="10dp"
-                android:paddingLeft="10dp"
-                android:orientation="vertical"
-                tools:ignore="RtlSymmetry,UseCompoundDrawables">
-                <ImageView
-                    android:id="@+id/saoma_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ic_saomachange"
-                    tools:ignore="ContentDescription,RtlHardcoded" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:textColor="#ffffff"
-                    android:text="扫一扫"
-                    tools:ignore="HardcodedText,RtlHardcoded" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingLeft="20dp"
-                android:orientation="vertical"
-                tools:ignore="RtlSymmetry,UseCompoundDrawables">
-
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ic_add"
-                    tools:ignore="ContentDescription,RtlHardcoded" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:text="待添加项"
-                    android:textColor="#ffffff"
-                    tools:ignore="HardcodedText,RtlHardcoded" />
-            </LinearLayout>
-        </LinearLayout>
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="80dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/ic_fg1"/>
+    <TextView
+        android:id="@+id/text1"
+        android:layout_below="@id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp"
+        android:text="您已进入扫码巡检界面"
+        tools:ignore="HardcodedText" />
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:text="请点击扫码完成巡检任务"
+        tools:ignore="HardcodedText" />
+    <Button
+        android:id="@+id/saoma_btn"
+        android:layout_below="@id/text1"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="扫描巡检"
+        android:background="@drawable/saoma_btn"
+        tools:ignore="HardcodedText" />
 </RelativeLayout>

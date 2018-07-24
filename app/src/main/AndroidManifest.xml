@@ -34,14 +34,19 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.PhotoActivity"/>
-        <activity android:name=".Activity.ScanActivity"/>
+        <activity android:name=".Activity.PhotoActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity android:name=".Activity.ScanActivity"
+            tools:ignore="InnerclassSeparator" />
         <activity android:name=".Activity.MainActivity"
             tools:ignore="InnerclassSeparator" />
         <activity android:name=".Activity.LoginActivity"
             tools:ignore="InnerclassSeparator" />
         <activity android:name=".Activity.SuccessActivity"
             tools:ignore="InnerclassSeparator" />
+        <activity android:name=".Activity.BbenActivity"/>
+        <activity android:name=".Activity.Setpsw"/>
+        <activity android:name=".Activity.PersonalActivity"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
