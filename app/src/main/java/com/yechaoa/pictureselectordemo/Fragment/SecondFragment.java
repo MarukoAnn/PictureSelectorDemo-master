@@ -1,9 +1,11 @@
 package com.yechaoa.pictureselectordemo.Fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
 
+import com.github.zackratos.ultimatebar.UltimateBar;
 import com.yechaoa.pictureselectordemo.Activity.BbenActivity;
 import com.yechaoa.pictureselectordemo.Activity.LaunchActivity;
 import com.yechaoa.pictureselectordemo.Activity.PersonalActivity;
@@ -30,10 +32,12 @@ import java.util.ArrayList;
  */
 public class SecondFragment extends Fragment {
     private View view;
-    String url = "http://120.78.137.182/element-admin/user/logout";
+    String url = "http://123.249.28.108:8081/element-admin/user/logout";
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fg2, container, false);
+
+
         TextView tv =(TextView) view.findViewById(R.id.change_paw);
         tv.setOnClickListener(new View.OnClickListener() {
             @Override

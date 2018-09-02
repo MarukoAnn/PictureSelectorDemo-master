@@ -5,21 +5,20 @@
     android:layout_height="56dp"
     android:background="#000000">
     <ImageView
-        android:id="@+id/return_view"
-        android:layout_marginLeft="5dp"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:id="@+id/returnview"
+        android:layout_width="40dp"
+        android:layout_height="35dp"
         android:layout_gravity="center"
         android:background="@drawable/ic_pensonal"
         tools:ignore="ContentDescription" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="个人资料"
+        android:text="巡检报告"
         android:textSize="24dp"
-        android:layout_marginRight="30dp"
         android:gravity="center"
         android:layout_gravity="center_vertical"
-        android:textColor="#fff"
+        android:layout_marginRight="30dp"
+        android:textColor="#ff661a"
         tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
 </LinearLayout>

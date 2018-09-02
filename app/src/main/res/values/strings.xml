@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">工艺巡检</string>
+    <string name="app_name">设备巡检</string>
     <string name="logintext">贵州中铝彩铝科技有限公司</string>
     <string name="newpswDescription">密码长度至少为6个字符，最多不超过32个字符</string>
 </resources>

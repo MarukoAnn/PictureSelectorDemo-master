@@ -2,6 +2,7 @@ package com.yechaoa.pictureselectordemo.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.github.zackratos.ultimatebar.UltimateBar;
 import com.yechaoa.pictureselectordemo.Modle.RSpostData;
 import com.yechaoa.pictureselectordemo.Modle.ResultData;
 import com.yechaoa.pictureselectordemo.Modle.ReturnPostData;
@@ -64,7 +66,15 @@ public class Setpsw extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setpaw);
         intView();
-
+        /**
+         * 设置状态栏的颜色
+         *
+         */
+        UltimateBar.newColorBuilder()
+                .statusColor(Color.parseColor("#000000"))       // 状态栏颜色
+                .statusDepth(30)                // 状态栏颜色深度
+                .build(this)
+                .apply();
 
         ImageView imageView = (ImageView) findViewById(R.id.returnview);
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -144,7 +154,7 @@ public class Setpsw extends Activity {
         String SidStatus = null;
         String status = "20";
         newPsword = newpsword;
-        String url = "http://120.78.137.182/element-admin/user/query-self";
+        String url = "http://123.249.28.108:8081/element-admin/user/query-self";
         OkHttpClient client = new OkHttpClient();
         Gson gson = new Gson();
         ResultData mdata = new ResultData();

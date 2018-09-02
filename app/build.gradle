@@ -38,5 +38,6 @@ dependencies {
     implementation 'com.squareup.okio:okio:1.13.0'
     implementation 'com.squareup.okhttp3:okhttp:3.9.0'
     implementation 'com.google.code.gson:gson:2.8.1'
-
+    implementation 'com.github.zackratos.ultimatebar:ultimatebar2:2.0.0'//状态栏透明设置
+    implementation 'com.zyao89:zloading:1.1.1'//设置上传的动画
 }

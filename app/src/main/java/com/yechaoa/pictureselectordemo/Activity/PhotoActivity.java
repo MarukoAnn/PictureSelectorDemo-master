@@ -33,6 +33,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.zackratos.ultimatebar.UltimateBar;
 import com.google.gson.Gson;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -44,14 +45,25 @@ import com.yechaoa.pictureselectordemo.Modle.ListData;
 import com.yechaoa.pictureselectordemo.Modle.PostlistData;
 import com.yechaoa.pictureselectordemo.Modle.SelectData;
 import com.yechaoa.pictureselectordemo.Modle.SelectDatadb;
+import com.yechaoa.pictureselectordemo.Modle.gpsData;
 import com.yechaoa.pictureselectordemo.R;
 import com.yechaoa.pictureselectordemo.Util.DataDBHepler;
 import com.yechaoa.pictureselectordemo.Util.FullyGridLayoutManager;
+import com.zyao89.view.zloading.ZLoadingDialog;
+
+import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -61,6 +73,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.luck.picture.lib.permissions.RxPermissions.TAG;
+import static com.zyao89.view.zloading.Z_TYPE.ELASTIC_BALL;
+import static com.zyao89.view.zloading.Z_TYPE.LEAF_ROTATE;
+
 
 public class PhotoActivity extends Activity {
     private int maxSelectNum = 9;
@@ -78,29 +93,37 @@ public class PhotoActivity extends Activity {
     List<String> listcheck= new ArrayList<>();//多选框
     List<String>valueslist = new ArrayList<>();//装载点击设备的状态
     List<String>namelist = new ArrayList<>();//装载参与巡检的人员
+    List<String> valuesResult;//装载参与巡检的人员
     String[] valuse = new String[]{};//装载点击设备的状态
     String[] name=new String[]{};//装载参与巡检的人员
     List<File> file = new ArrayList<>();
+    String[] itemlist;
     double longitude;
     double latitude;
-
+    String path = "http://123.249.28.108:8081/element-admin/picture-upload";
+    ZLoadingDialog dialog = new ZLoadingDialog(PhotoActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.report_layout);
+        /**
+         * 设置状态栏
+         */
+        UltimateBar.newColorBuilder()
+                .statusColor(Color.parseColor("#000000"))       // 状态栏颜色
+                .statusDepth(30)                // 状态栏颜色深度
+                .build(this)
+                .apply();
         initView();
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
-        dbHepler = new DataDBHepler(getBaseContext());
-
-        if (dbHepler.isItemorData()) {
-            ArrayList<ListData> DataList = dbHepler.FindItemData();
-            final ListData data = new ListData(DataList.get(0).getId(),DataList.get(0).getItemcode(),DataList.get(0).getItemname(),DataList.get(0).getItemdetail(),DataList.get(0).getUnitcode(),DataList.get(0).getItemmembers(),DataList.get(0).getLongitude(),DataList.get(0).getLatitude());
-            String itemdetail = data.getItemdetail();
-            String itemmembers = data.getItemmembers();
-            Log.i(TAG,"itemmembers"+itemmembers);
-            Log.i(TAG,"设备"+data.getItemdetail());
-            String[] itemlist= itemdetail.split("，");
+            gpsData data1 = new gpsData();
+            String itemdetail = data1.getItemdetail();
+            String itemmembers = data1.getItemmembers();
+            Log.i(TAG,"itemmembers:"+data1.getItemmembers());
+            Log.i(TAG,"设备"+data1.getItemdetail());
+            Log.i(TAG,"经度"+gpsData.getLatitude());
+            itemlist= itemdetail.split("，");
             for (int i=0;i<itemlist.length;i++)
             {
                 listitem.add(itemlist[i]);
@@ -110,20 +133,35 @@ public class PhotoActivity extends Activity {
                 listcheck.add(checklist[j]);
                 Log.i(TAG,"巡检人员"+checklist[j]);
             }
+            for (int i=0;i<=listitem.size()-1;i++) {
+                valueslist.add("正常");
+            }
             Log.i(TAG,"列表设备"+listitem);
             Log.i(TAG,"巡检人员"+listcheck);
             PostAdapter postAdapter =new PostAdapter(getBaseContext(),listitem);
             listView.setAdapter(postAdapter);
             GridAdapter gridAdapter = new GridAdapter(getBaseContext(),listcheck);
             gridView.setAdapter(gridAdapter);
-        }
+
+        GspData();
         initWidget();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              Sysout();
 
+                dialog.setLoadingBuilder(LEAF_ROTATE)//设置类型
+                        .setLoadingColor(Color.GREEN)//颜色
+                        .setHintText("上传中...")
+                        .setHintTextSize(16) // 设置字体大小 dp
+                        .setHintTextColor(Color.GREEN)  // 设置字体颜色
+                        .setDurationTime(0.5) // 设置动画时间百分比 - 0.5倍
+//                        .setDialogBackgroundColor(Color.parseColor("#CC111111")) // 设置背景色，默认白色
+                        .setCanceledOnTouchOutside(false)
+                        .show();
+
+                Sysout();
             }
+
         });
     }
 
@@ -277,6 +315,9 @@ public class PhotoActivity extends Activity {
         }
     }
 
+
+//图片获取
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -297,23 +338,16 @@ public class PhotoActivity extends Activity {
 
                     adapter.setList(selectList);
                     adapter.notifyDataSetChanged();
-//                    Path.clear();
-//                    List<LocalMedia>listpath=adapter.returnurl();
-//                    for (int i=0;i<listpath.size();i++){
-//                        LocalMedia media = listpath.get(i);
-//                        Path.add(i, media.getPath());
-//                    }
-//
-//                    for (int j=0;j<Path.size();j++) {
-//                        file.add(new File(Path.get(j)));
-//                    }
-//                    Log.i(TAG,"文件个数为："+file.size());
+
                     Log.i(String.valueOf(PhotoActivity.this),"图片地址为："+Path);
                     break;
             }
         }
     }
 
+    /**
+     * 单选框的按钮状态
+     */
     public class PostAdapter extends BaseAdapter {
 
         private ArrayList<String> List;
@@ -351,11 +385,10 @@ public class PhotoActivity extends Activity {
             radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
+
                     String tip = checkedId ==R.id.checkBox?"正常":"异常";
 //                    valuse[position]=tip;
-
-                    valueslist.add(List.get(position));
-                    valueslist.add(tip);
+                    valueslist.set(position,tip);
 //                    valueslist.add("\""+List.get(position)+"\""+":"+"\""+tip+"\"");
 
 //                    System.out.println(List.get(position)+":"+tip);
@@ -367,9 +400,7 @@ public class PhotoActivity extends Activity {
 //                    List<Object> dsd = new ArrayList<>();
 //
 //                    dsd.add(dsdd);
-//
 //                    System.out.println(dsd);
-
                     Log.i(TAG,"设备状态"+tip);
 
                 }
@@ -412,13 +443,12 @@ public class PhotoActivity extends Activity {
             if (view == null) {
                 view = view.inflate(context, R.layout.checkbox_item, null);
             }
-           final CheckBox tv = (CheckBox) view.findViewById(R.id.check);
+            final CheckBox tv = (CheckBox) view.findViewById(R.id.check);
             tv.setText(List.get(position));
-             tv.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                 @Override
-                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                     if (isChecked)
-                     {
+            tv.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
 //                         name[position]=buttonView.getText().toString();
 
 //                         if (namelist.size()>1) {
@@ -432,19 +462,27 @@ public class PhotoActivity extends Activity {
 //                                 namelist.add(buttonView.getText().toString());
 //                             }
 //                         }else {
-                             Log.i(TAG,"选中："+buttonView.getText().toString());
-                             namelist.add(buttonView.getText().toString());
+                        Log.i(TAG, "选中：" + buttonView.getText().toString());
+                        namelist.add(buttonView.getText().toString());
 //                         }
-                     }
-                 }
-             });
+                    }
+                }
+            });
+
             return view;
         }
     }
+
     public void Sysout(){
 
         Log.i(TAG,"设备状态"+valueslist);
         Log.i(TAG,"数据："+valueslist.get(0));
+        valuesResult= Arrays.asList(new String[valueslist.size()]);
+        for(int i = 0;i<valueslist.size();i++)
+        {
+            String res = itemlist[i]+","+valueslist.get(i);
+            valuesResult.set(i, res);
+        }
         file.clear();
         Path.clear();
         List<LocalMedia>listpath=adapter.returnurl();
@@ -452,7 +490,6 @@ public class PhotoActivity extends Activity {
             LocalMedia media = listpath.get(i);
             Path.add(i, media.getPath());
         }
-
         for (int j=0;j<Path.size();j++) {
             file.add(new File(Path.get(j)));
         }
@@ -460,37 +497,53 @@ public class PhotoActivity extends Activity {
         Log.i(TAG,"文件个数为："+file.size());
         SelData();
 
-
     }
+
+
+    //拿取数据上传服务器
     public void SelData() {
         final String[] result = new String[1];
-        GspData();
-        ArrayList<ListData> Datalist = dbHepler.FindItemData();
-        final ListData data = new ListData(Datalist.get(0).getId(), Datalist.get(0).getItemcode(), Datalist.get(0).getItemname(), Datalist.get(0).getItemdetail(), Datalist.get(0).getUnitcode(), Datalist.get(0).getItemmembers(), Datalist.get(0).getLongitude(), Datalist.get(0).getLatitude());
+       gpsData data = new gpsData();
         String itemcode = data.getItemcode();
         String itemname = data.getItemname();
         String unitcode = data.getUnitcode();
-        String longitudeIP = data.getLongitude();
-        String latitudeIP = data.getLatitude();
+        String longitudeIP = gpsData.getLongitude();
+        String latitudeIP = gpsData.getLatitude();
         final SelectData selectData = new SelectData();
         SelectDatadb selectDatadb = new SelectDatadb();
-        if (describe.getText().toString().equals(""))
+
+        for (int k = 0;k<valueslist.size();k++)
+        {
+             if (valueslist.get(k).equals("异常"))
+             {
+                 selectDatadb.setResult("异常");
+                 break;
+             }else {
+                 selectDatadb.setResult("正常");
+             }
+        }
+        if (describe.getText().toString().equals("")||describe.getText().toString().equals("正常"))
         {
             selectDatadb.setDescription("正常");
+
         }else {
             selectDatadb.setDescription(describe.getText().toString());
         }
+
+        String valueResult = valuesResult.toString();
         selectDatadb.setItemcode(itemcode);
         selectDatadb.setItemname(itemname);
         selectDatadb.setLatitudeIP(latitudeIP);
         selectDatadb.setLongitudeIP(longitudeIP);
-        selectDatadb.setNormal(valueslist);
+        selectDatadb.setNormal(valueResult);
+        Log.i(TAG, "normoal值为："+valueResult);
         selectDatadb.setInspector(namelist);
         selectDatadb.setLongitude(longitude);
         selectDatadb.setLatitude(latitude);
         Gson gson = new Gson();
         final String json = gson.toJson(selectDatadb);
         Log.i(TAG, "shuju :" + json);
+
         selectData.setInspectiondata(json);
         final File[] files = file.toArray(new File[file.size()]);
 
@@ -508,58 +561,60 @@ public class PhotoActivity extends Activity {
                     }else if (file.size()==2) {
                         result[0] = spostHttpMapSubmit.posthttpmap2(selectData.getInspectiondata(), files);
                     }else if (file.size()==3) {
-                        result[0] = spostHttpMapSubmit.posthttpmap2(selectData.getInspectiondata(), files);
+                        result[0] = spostHttpMapSubmit.posthttpmap3(selectData.getInspectiondata(), files);
                     }else if (file.size()==4) {
-                        result[0] = spostHttpMapSubmit.posthttpmap2(selectData.getInspectiondata(), files);
+                        result[0] = spostHttpMapSubmit.posthttpmap4(selectData.getInspectiondata(), files);
                     }else if (file.size()==5) {
-                        result[0] = spostHttpMapSubmit.posthttpmap2(selectData.getInspectiondata(), files);
+                        result[0] = spostHttpMapSubmit.posthttpmap5(selectData.getInspectiondata(), files);
                     }else if (file.size()==6) {
-                        result[0] = spostHttpMapSubmit.posthttpmap2(selectData.getInspectiondata(), files);
+                        result[0] = spostHttpMapSubmit.posthttpmap6(selectData.getInspectiondata(), files);
                     }else if (file.size()==7) {
-                        result[0] = spostHttpMapSubmit.posthttpmap2(selectData.getInspectiondata(), files);
+                        result[0] = spostHttpMapSubmit.posthttpmap7(selectData.getInspectiondata(), files);
                     }else if (file.size()==8) {
-                        result[0] = spostHttpMapSubmit.posthttpmap2(selectData.getInspectiondata(), files);
+                        result[0] = spostHttpMapSubmit.posthttpmap8(selectData.getInspectiondata(), files);
                     }else if (file.size()==9) {
-                        result[0] = spostHttpMapSubmit.posthttpmap2(selectData.getInspectiondata(), files);
+                        result[0] = spostHttpMapSubmit.posthttpmap9(selectData.getInspectiondata(), files);
+                    } else if (file.size()==10) {
+                            result[0] = spostHttpMapSubmit.posthttpmap10(selectData.getInspectiondata(), files);
                     }else
                     {
                         Toast.makeText(PhotoActivity.this,"图片超过数量",Toast.LENGTH_LONG).show();
                     }
 //                    String result = spostHttpMapSubmit.posthttpmap(selectData.getInspectiondata(), files);
                     if (result[0].equals("10")) {
-                        Toast.makeText(PhotoActivity.this, "提交成功", Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                        Toast.makeText(PhotoActivity.this, "上传成功", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent();
                         intent.setClass(PhotoActivity.this,SuccessActivity.class);
                         startActivity(intent);
                         finish();
+
                     }else {
-                        Toast.makeText(PhotoActivity.this, "失败", Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                        Toast.makeText(PhotoActivity.this, "上传失败，服务器故障", Toast.LENGTH_LONG).show();
                     }
                     Looper.loop();
                 }catch (Exception e)
                 {
                     e.printStackTrace();
+                    dialog.dismiss();
+                    Toast.makeText(PhotoActivity.this, "网络错误", Toast.LENGTH_LONG).show();
+
                 }
 
             }
         }).start();
     }
 
+    /**
+     * 获取GPS定位
+     */
+    @SuppressLint("MissingPermission")
     public void GspData() {
         final LocationManager locationManager;
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        //从GPS获取最近信息
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            ActivityCompat.requestPermissions(PhotoActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
-        }
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        @SuppressLint("MissingPermission") Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         //使用location 来更新EditText的显示
         updateView(location);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 8, new LocationListener() {
@@ -613,28 +668,20 @@ public class PhotoActivity extends Activity {
             }
         }
 
-    public class SpostHttpMapSubmit {
-        String path = "http://120.78.137.182/element-admin/picture-upload";
+    public class  SpostHttpMapSubmit {
+//        String path = "http://192.168.137.1:8090/element-admin/picture-upload";
         public String posthttpmap(String inspectiondata) {
             //okhttp Post请求传输Json数据
 
-//            File[] files = file.listFiles();
-//            File[] files = file.listFiles();
-
-
-//            String path = "http://120.78.137.182/element-admin/picture-upload";
-//            String path = "http://120.78.137.182/element-admin/picture-upload";
             String SpostStatus = null;
             String imageType = "multipart/form-data";
 //            MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             //将接收到的JSON数据放到实体类里
             Gson gson =new Gson();
             OkHttpClient client = new OkHttpClient();
-//            for(int i=0;i<file.length;i++)
-//            {
-//                RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), file[i]);
-//            }
-//                RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), file[0]);
+            client.newBuilder()
+                    .connectTimeout(20, TimeUnit.SECONDS)
+                    .readTimeout(20, TimeUnit.SECONDS).build();
 
                 RequestBody requestBody = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
@@ -660,6 +707,7 @@ public class PhotoActivity extends Activity {
             }catch (Exception e){
                 e.printStackTrace() ;
                 System.out.println("异常"+e);
+                Toast.makeText(PhotoActivity.this, "连接超时,服务器异常", Toast.LENGTH_SHORT).show();
             }
             return SpostStatus;
         }
@@ -671,18 +719,17 @@ public class PhotoActivity extends Activity {
 //            File[] files = file.listFiles();
 
 
-            String path = "http://120.78.137.182/element-admin/picture-upload";
+
 //            String path = "http://120.78.137.182/element-admin/picture-upload";
             String SpostStatus = null;
             String imageType = "multipart/form-data";
 //            MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             //将接收到的JSON数据放到实体类里
             Gson gson =new Gson();
-            OkHttpClient client = new OkHttpClient();
-//            for(int i=0;i<file.length;i++)
-//            {
-//                RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), file[i]);
-//            }
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(20, TimeUnit.SECONDS)
+                    .writeTimeout(20, TimeUnit.SECONDS).build();
+
             RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), file[0]);
             RequestBody requestBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
@@ -691,14 +738,13 @@ public class PhotoActivity extends Activity {
                     .addFormDataPart("imagetype", imageType)
                     .build();
             Request request = new Request.Builder()
-                    .url(path)
+                    .url("http://192.168.28.151:8081/element-admin/picture-upload")
                     .post(requestBody)
                     .build();
-//            }
-
+            System.out.println(path);
             try {
-                Response response = client.newCall(request).execute();
 
+                Response response = client.newCall(request).execute();
                 //获取后台传输的额status状态码
                 String result = response.body().string();
                 PostlistData postlistData = gson.fromJson(result,PostlistData.class);
@@ -708,29 +754,22 @@ public class PhotoActivity extends Activity {
             }catch (Exception e){
                 e.printStackTrace() ;
                 System.out.println("异常"+e);
+                Toast.makeText(PhotoActivity.this, "连接超时,服务器异常", Toast.LENGTH_SHORT).show();
             }
             return SpostStatus;
         }
 
+
         public String posthttpmap2(String inspectiondata, File[] file) {
             //okhttp Post请求传输Json数据
 
-//            File[] files = file.listFiles();
-//            File[] files = file.listFiles();
-
-
-
-//            String path = "http://120.78.137.182/element-admin/picture-upload";
             String SpostStatus = null;
             String imageType = "multipart/form-data";
 //            MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             //将接收到的JSON数据放到实体类里
             Gson gson =new Gson();
-            OkHttpClient client = new OkHttpClient();
-//            for(int i=0;i<file.length;i++)
-//            {
-//                RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), file[i]);
-//            }
+            OkHttpClient client = new OkHttpClient.Builder().connectTimeout(20, TimeUnit.SECONDS).writeTimeout(20, TimeUnit.SECONDS).build();
+
             RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), file[0]);
             RequestBody fileBody1 = RequestBody.create(MediaType.parse("image/*"), file[1]);
 
@@ -759,6 +798,7 @@ public class PhotoActivity extends Activity {
             }catch (Exception e){
                 e.printStackTrace() ;
                 System.out.println("异常"+e);
+                Toast.makeText(PhotoActivity.this, "连接超时,服务器异常", Toast.LENGTH_SHORT).show();
             }
             return SpostStatus;
         }
@@ -812,6 +852,7 @@ public class PhotoActivity extends Activity {
             }catch (Exception e){
                 e.printStackTrace() ;
                 System.out.println("异常"+e);
+                Toast.makeText(PhotoActivity.this, "连接超时,服务器异常", Toast.LENGTH_SHORT).show();
             }
             return SpostStatus;
         }
@@ -867,6 +908,7 @@ public class PhotoActivity extends Activity {
             }catch (Exception e){
                 e.printStackTrace() ;
                 System.out.println("异常"+e);
+                Toast.makeText(PhotoActivity.this, "连接超时,服务器异常", Toast.LENGTH_SHORT).show();
             }
             return SpostStatus;
         }
@@ -915,6 +957,7 @@ public class PhotoActivity extends Activity {
             }catch (Exception e){
                 e.printStackTrace() ;
                 System.out.println("异常"+e);
+                Toast.makeText(PhotoActivity.this, "连接超时,服务器异常", Toast.LENGTH_SHORT).show();
             }
             return SpostStatus;
         }
@@ -968,6 +1011,7 @@ public class PhotoActivity extends Activity {
             }catch (Exception e){
                 e.printStackTrace() ;
                 System.out.println("异常"+e);
+                Toast.makeText(PhotoActivity.this, "连接超时,服务器异常", Toast.LENGTH_SHORT).show();
             }
             return SpostStatus;
         }
@@ -1022,6 +1066,7 @@ public class PhotoActivity extends Activity {
             }catch (Exception e){
                 e.printStackTrace() ;
                 System.out.println("异常"+e);
+                Toast.makeText(PhotoActivity.this, "连接超时,服务器异常", Toast.LENGTH_SHORT).show();
             }
             return SpostStatus;
         }
@@ -1139,6 +1184,7 @@ public class PhotoActivity extends Activity {
             }catch (Exception e){
                 e.printStackTrace() ;
                 System.out.println("异常"+e);
+                Toast.makeText(PhotoActivity.this, "连接超时,服务器异常", Toast.LENGTH_SHORT).show();
             }
             return SpostStatus;
         }
@@ -1200,6 +1246,7 @@ public class PhotoActivity extends Activity {
             }catch (Exception e){
                 e.printStackTrace() ;
                 System.out.println("异常"+e);
+                Toast.makeText(PhotoActivity.this, "连接超时,服务器异常", Toast.LENGTH_SHORT).show();
             }
             return SpostStatus;
         }

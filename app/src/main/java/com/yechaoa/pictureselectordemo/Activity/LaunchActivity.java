@@ -2,9 +2,11 @@ package com.yechaoa.pictureselectordemo.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.github.zackratos.ultimatebar.UltimateBar;
 import com.yechaoa.pictureselectordemo.Modle.SidSelectData;
 import com.yechaoa.pictureselectordemo.Util.DataDBHepler;
 import com.yechaoa.pictureselectordemo.R;
@@ -17,14 +19,18 @@ import java.util.ArrayList;
  */
 
 public class LaunchActivity extends Activity {
-    String Loginurl = "http://120.78.137.182/element-admin/user/logout";
+    String Loginurl = "http://123.249.28.108:8081/element-admin/user/logout";
     String Msid = null;
     String result;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.launch_layout);
-
+        UltimateBar.newColorBuilder()
+                .statusColor(Color.parseColor("#e5e1d5"))       // 状态栏颜色
+                .statusDepth(50)                // 状态栏颜色深度
+                .build(this)
+                .apply();
         /**
          * 查询数据库里的sid
          */

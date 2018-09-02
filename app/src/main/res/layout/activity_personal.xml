@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#021e28">
+    android:background="#fff">
 
     <include
         android:id="@+id/show_set_title"
@@ -23,18 +23,12 @@
             android:layout_marginRight="10dp"
             android:layout_height="wrap_content"
             android:gravity="center_vertical">
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_persion"
-                />
             <TextView
                 android:layout_marginLeft="9dp"
                 android:text="名字"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="#ffffff"
                 android:textSize="20dp"
                 tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
             <TextView
@@ -43,7 +37,6 @@
                 android:layout_height="30dp"
                 android:gravity="center"
                 android:layout_marginLeft="10dp"
-                android:textColor="#ffffff"
                 android:layout_weight="1"
                 tools:ignore="RtlHardcoded,TextFields" />
 
@@ -61,10 +54,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="20dp"
             android:gravity="center_vertical">
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_persion2"/>
+
             <TextView
                 android:layout_marginLeft="9dp"
                 android:text="身份证号"
@@ -72,7 +62,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textSize="20dp"
-                android:textColor="#ffffff"
                 tools:ignore="HardcodedText,RtlHardcoded" />
             <TextView
                 android:layout_marginLeft="5dp"
@@ -80,7 +69,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:gravity="center"
-                android:textColor="#ffffff"
                 android:layout_weight="1"
                 tools:ignore="RtlHardcoded" />
         </LinearLayout>
@@ -96,28 +84,29 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:gravity="center_vertical">
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="35dp"
-                android:src="@drawable/ic_persion3"/>
             <TextView
                 android:layout_marginLeft="9dp"
                 android:text="电话"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#ffffff"
                 android:textSize="20dp"
                 android:gravity="center"
                 tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+
             <TextView
-                android:layout_marginLeft="5dp"
                 android:id="@+id/personal_phone"
-                android:layout_width="wrap_content"
+                android:layout_width="298dp"
                 android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="2"
                 android:gravity="center"
-                android:textColor="#ffffff"
-                android:layout_weight="1"
                 tools:ignore="InefficientWeight,RtlHardcoded,TextFields" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="right"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text=">"/>-->
         </LinearLayout>
         <TextView
             android:layout_marginTop="10dp"

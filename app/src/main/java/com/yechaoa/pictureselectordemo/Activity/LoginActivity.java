@@ -1,17 +1,22 @@
 package com.yechaoa.pictureselectordemo.Activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.github.zackratos.ultimatebar.UltimateBar;
 import com.yechaoa.pictureselectordemo.Modle.LoginData;
 import com.yechaoa.pictureselectordemo.Modle.ReturnStatusData;
 import com.yechaoa.pictureselectordemo.Modle.UserpassData;
@@ -46,14 +51,27 @@ public class LoginActivity extends Activity {
     EditText username;
     EditText password;
     Button login_btn;
-    String path = "http://120.78.137.182/element-admin/user/login";
-    String Loginurl = "http://120.78.137.182/element-admin/user/logout";
+    String path = "http://123.249.28.108:8081/element-admin/user/login";
+    String Loginurl = "http://123.249.28.108:8081/element-admin/user/logout";
     DataDBHepler dbHepler;
     String result;
+    String Username;
+    String Password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
+        //从GPS获取最近信息
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
+        }
         ViewLayout();
         init();
         dbHepler = new DataDBHepler(getBaseContext());
@@ -61,22 +79,9 @@ public class LoginActivity extends Activity {
             if (dbHepler.isIdoruserpass()) {
                 ArrayList<UserpassData> DataList1 = dbHepler.FinduserpassData();
                 final UserpassData data1 = new UserpassData(DataList1.get(0).getId(), DataList1.get(0).getUser(), DataList1.get(0).getPassword());
-                String Username = data1.getUser();
-                String Password = data1.getPassword();
-                username.setText(Username);
-                password.setText(Password);
-                username.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        username.setCursorVisible(true);
-                    }
-                });
-                password.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        password.setCursorVisible(true);
-                    }
-                });
+                Username = data1.getUser();
+                Password = data1.getPassword();
+
             }
             else {
                 Log.i(TAG,"没有用户名");
@@ -85,6 +90,22 @@ public class LoginActivity extends Activity {
         {
             e.printStackTrace();
         }
+        username.setCursorVisible(false);
+        password.setCursorVisible(false);
+        username.setText(Username);
+        password.setText(Password);
+        username.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                username.setCursorVisible(true);
+            }
+        });
+        password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                password.setCursorVisible(true);
+            }
+        });
 
         login_btn.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -100,6 +121,10 @@ public class LoginActivity extends Activity {
                     public void run() {
                         Looper.prepare();
                         try {
+                            if(username.getText().toString().equals("")||password.getText().toString().equals(""))
+                            {
+                                Toast.makeText(LoginActivity.this, "用户名或密码不能为空", Toast.LENGTH_SHORT).show();
+                            }
                             result = GetPostLogin(username.getText().toString(), password.getText().toString(), path);
                         }catch (Exception e)
                         {
@@ -127,6 +152,7 @@ public class LoginActivity extends Activity {
                                 Intent intent = new Intent();
                                 intent.setClass(LoginActivity.this,MainActivity.class);
                                 startActivity(intent);
+                                finish();
                             } else if (result.equals("12")) {
                                 Toast.makeText(getApplicationContext(), "登录失败，服务器故障", Toast.LENGTH_SHORT).show();//提示用户登录失败
                             } else if (result.equals("14")) {
@@ -177,6 +203,7 @@ public class LoginActivity extends Activity {
             @Override
             public void onYesClick() {
                 downloadUtils.downloadAPK(url, "apk");
+                Toast.makeText(LoginActivity.this,"应用正在后台下载",Toast.LENGTH_LONG).show();
                 Dialog.dismiss();
             }
         });

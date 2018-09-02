@@ -80,7 +80,7 @@
                     android:layout_width="27dp"
                     android:layout_height="27dp"
                     android:layout_marginLeft="10dp"
-                    android:background="@drawable/ic_userfg2"
+                    android:background="@drawable/ic_persionfg"
                     android:layout_centerInParent="true"
                     android:layout_gravity="center"
                     tools:ignore="ContentDescription" />
@@ -120,7 +120,7 @@
                 <ImageView
                     android:layout_width="27dp"
                     android:layout_height="27dp"
-                    android:background="@drawable/ic_setfg2"
+                    android:background="@drawable/ic_persionfg1"
                     android:layout_centerInParent="true"
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"

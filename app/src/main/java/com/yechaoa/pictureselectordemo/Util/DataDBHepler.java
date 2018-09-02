@@ -34,7 +34,7 @@ public class DataDBHepler extends SQLiteOpenHelper {
         db.execSQL("create table if not exists User_table(id INTEGER primary key autoincrement,user varcher(256),name varcher(125),idnum verchar(125),birthday varcher(125),phone varcher(125))");
         db.execSQL("create table if not exists Oid_table(id INTEGER primary key autoincrement,oid varchar(256))");
         db.execSQL("create table if not exists Password_table(id INTEGER primary key autoincrement,username varcher(125),password varcher(125))");
-        db.execSQL("create table if not exists Equipment_table(id INTEGER primary key autoincrement,itemcode varcher(125),itemname varcher(125),itemdetail varcher(256),unitcode varcher(125),itemmembers varcher(125),longitude varcher(125),latitude varcher(125))");
+        db.execSQL("create table if not exists Equipment_table(id INTEGER primary key autoincrement,itemcode varcher(125),itemname varcher(125),itemdetail varcher(256),unitcode varcher(125),itemmembers varcher(125),longitude varcher(255),latitude varcher(255))");
     }
 
     @Override

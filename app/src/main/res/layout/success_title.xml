@@ -5,6 +5,13 @@
     android:orientation="horizontal"
     android:layout_height="56dp"
     android:background="#444e5a">
+    <ImageView
+        android:id="@+id/fahui"
+        android:layout_width="40dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        android:background="@drawable/ic_successreturnl"
+        tools:ignore="ContentDescription" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

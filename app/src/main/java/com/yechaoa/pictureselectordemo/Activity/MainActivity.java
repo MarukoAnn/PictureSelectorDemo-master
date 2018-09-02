@@ -1,13 +1,21 @@
 package com.yechaoa.pictureselectordemo.Activity;
 
 
+import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 
 import android.os.Looper;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
@@ -23,8 +31,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 
+import com.github.zackratos.ultimatebar.UltimateBar;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -32,6 +42,8 @@ import com.yechaoa.pictureselectordemo.Fragment.FirstFragment;
 import com.yechaoa.pictureselectordemo.Fragment.SecondFragment;
 
 import com.yechaoa.pictureselectordemo.Modle.SidSelectData;
+import com.yechaoa.pictureselectordemo.Modle.StaticData;
+import com.yechaoa.pictureselectordemo.Modle.gpsData;
 import com.yechaoa.pictureselectordemo.R;
 import com.yechaoa.pictureselectordemo.Util.DataDBHepler;
 import com.yechaoa.pictureselectordemo.Util.SpostupdateHttp;
@@ -53,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView firstImage;
     private ImageView secondImage;
     private Handler mHandler;
+    private TextView firstText;
+    private TextView secondText;
     // 定义几个颜色
     private int whirt = 0xFFFFFFFF;
     private int gray = 0xFF7597B3;
@@ -63,7 +77,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String index;
     //    final Handler handler = new Handler();
 //    private int TIME = 370000;  //每隔1s执行一次.
-    String path = "http://120.78.137.182/element-admin/user/sid-update";
+    String path = "http://123.249.28.108:8081/element-admin/user/sid-update";
+    String latitude;
+    String longitude;
+    StringBuffer sb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         index = getIntent().getStringExtra("index");
         if (index!=null) {
             setChioceItem(Integer.parseInt(index));
+
         }
         else {
             setChioceItem(0); // 初始化页面加载时显示第一个选项卡
@@ -106,10 +124,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 // 初始化底部导航栏的控件
         firstImage = (ImageView) findViewById(R.id.first_image);
         secondImage = (ImageView) findViewById(R.id.second_image);
+        firstText = (TextView) findViewById(R.id.first_text);
+        secondText = (TextView) findViewById(R.id.second_text);
         firstLayout = (RelativeLayout) findViewById(R.id.first_layout);
         secondLayout = (RelativeLayout) findViewById(R.id.second_layout);
         firstLayout.setOnClickListener(MainActivity.this);
         secondLayout.setOnClickListener(MainActivity.this);
+//        GspData();
+//        final Handler handler=new Handler();
+//        Runnable runnable=new Runnable() {
+//            @Override
+//            public void run() {
+//                GspData();
+//                handler.postDelayed(this, 3000);
+//            }
+//
+//        };
+//        handler.postDelayed(runnable, 3000);
+
 
         new Thread(new Runnable() {
             @Override
@@ -166,7 +198,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (index) {
             case 0:
                 firstImage.setImageResource(R.drawable.ic_shouye1);
-                firstLayout.setBackgroundColor(whirt);
+                firstText.setTextColor(Color.parseColor("#ff661a"));
+//                firstText.setBackgroundColor(Color.parseColor("#ff661a"));
+                UltimateBar.newColorBuilder()
+                        .statusColor(Color.parseColor("#000000"))       // 状态栏颜色
+                        .statusDepth(30)                // 状态栏颜色深度
+                        .build(this)
+                        .apply();
 // 如果fg1为空，则创建一个并添加到界面上
                 if (fg1 == null) {
                     fg1 = new FirstFragment();
@@ -177,8 +215,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case 1:
-                secondImage.setImageResource(R.drawable.ic_persion1);
-                secondLayout.setBackgroundColor(whirt);
+                secondImage.setImageResource(R.drawable.ic_geren1);
+                secondText.setTextColor(Color.parseColor("#ff661a"));
+                UltimateBar.newColorBuilder()
+                        .statusColor(Color.parseColor("#17abd9"))       // 状态栏颜色
+                        .statusDepth(30)                // 状态栏颜色深度
+                        .build(this)
+                        .apply();
                 if (fg2 == null) {
                     fg2 = new SecondFragment();
                     fragmentTransaction.add(R.id.content,fg2);
@@ -195,9 +238,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void clearChioce() {
         firstImage.setImageResource(R.drawable.ic_shouye);
-        firstLayout.setBackgroundColor(whirt);
-        secondImage.setImageResource(R.drawable.ic_person);
-        secondLayout.setBackgroundColor(whirt);
+        firstText.setTextColor(Color.parseColor("#a1a1a1"));
+        secondImage.setImageResource(R.drawable.ic_geren);
+        secondText.setTextColor(Color.parseColor("#a1a1a1"));
     }
 
     /**
@@ -255,4 +298,87 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
+//    public void GspData() {
+//        final LocationManager locationManager;
+//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        //从GPS获取最近信息
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
+//        }
+//        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        //使用location 来更新EditText的显示
+//        updateView(location);
+//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 8, new LocationListener() {
+//            @Override
+//            public void onLocationChanged(Location location) {
+//                //当GPS 定位信息发生改变时，更新位置
+//                updateView(location);
+//            }
+//
+//            @Override
+//            public void onStatusChanged(String provider, int i, Bundle bundle) {
+//
+//            }
+//
+//            @Override
+//            public void onProviderEnabled(String provider) {
+//                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                    // TODO: Consider calling
+//                    //    ActivityCompat#requestPermissions
+//                    // here to request the missing permissions, and then overriding
+//                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//                    //                                          int[] grantResults)
+//                    // to handle the case where the user grants the permission. See the documentation
+//                    // for ActivityCompat#requestPermissions for more details.
+//
+//                    return;
+//                }
+//                updateView(locationManager.getLastKnownLocation(provider));
+//            }
+//
+//            @Override
+//            public void onProviderDisabled(String provider) {
+//
+//                updateView(null);
+//            }
+//
+//        });
+//    }
+//    public void updateView(Location newLocation){
+//        if (newLocation!=null){
+//             sb = new StringBuffer();
+//            sb.append("实时的位置信息：\n");
+//            sb.append("\n经度");
+//            sb.append(newLocation.getLongitude());
+//            sb.append("\n纬度：");
+//            sb.append(newLocation.getLatitude());
+//            Log.i(TAG,"经度:"+newLocation.getLongitude());
+//            Log.i(TAG,"纬度:"+newLocation.getLatitude());
+//            StaticData staticData = new StaticData();
+//            staticData.setGpsdata(sb.toString());
+//            gpsData.setLatitude(""+newLocation.getLatitude());
+//            gpsData.setLongitude(""+newLocation.getLongitude());
+////            latitude = ""+newLocation.getLatitude();
+////             longitude = ""+newLocation.getLongitude();
+//        }
+//    }
+
+//    public String getLongitude() {
+//        return longitude;
+//    }
+//
+//    public String getLatitude() {
+//        return latitude;
+//    }
+//    public  String getsb(){
+//        return sb.toString();
+//    }
 }

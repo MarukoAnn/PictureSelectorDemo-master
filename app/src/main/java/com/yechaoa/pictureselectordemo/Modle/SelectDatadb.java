@@ -5,13 +5,15 @@ import java.util.List;
 public class SelectDatadb {
     private String itemcode;
     private String itemname;
-    private List<String> normal;
+    private String normal;
     private List<String>  inspector;
     private double longitude;
     private double  latitude;
     private String longitudeIP;
     private String latitudeIP;
     private String description;
+    private String result;
+
 
     public String getItemname() {
         return itemname;
@@ -45,7 +47,7 @@ public class SelectDatadb {
         return longitude;
     }
 
-    public List<String> getNormal() {
+    public String getNormal() {
         return normal;
     }
 
@@ -81,7 +83,15 @@ public class SelectDatadb {
         this.latitude = latitude;
     }
 
-    public void setNormal(List<String> normal) {
+    public void setNormal(String normal) {
         this.normal = normal;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }

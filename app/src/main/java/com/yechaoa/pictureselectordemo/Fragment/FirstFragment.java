@@ -3,31 +3,38 @@ package com.yechaoa.pictureselectordemo.Fragment;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.zackratos.ultimatebar.UltimateBar;
 import com.google.gson.Gson;
+import com.yechaoa.pictureselectordemo.Activity.MainActivity;
 import com.yechaoa.pictureselectordemo.Activity.PhotoActivity;
 import com.yechaoa.pictureselectordemo.Activity.ScanActivity;
 
 
 import com.yechaoa.pictureselectordemo.Modle.ListData;
 import com.yechaoa.pictureselectordemo.Modle.PostlistData;
+import com.yechaoa.pictureselectordemo.Modle.StaticData;
+import com.yechaoa.pictureselectordemo.Modle.gpsData;
 import com.yechaoa.pictureselectordemo.Util.DataDBHepler;
 import com.yechaoa.pictureselectordemo.R;
 
@@ -48,7 +55,7 @@ import okhttp3.Response;
 
 public class FirstFragment extends Fragment {
 
-    private String path = "http://120.78.137.182/element-admin/item-info/find";
+    private String path = "http://123.249.28.108:8081/element-admin/item-info/find";
 //    private String path ="http://192.168.28.74:8080/EquipmentInspection/item-info/find";
     private View view;
     private static final String TAG = "MainActivity";
@@ -56,20 +63,24 @@ public class FirstFragment extends Fragment {
     private ReceiveBroadCast receiveBroadCast;
     String result;
     DataDBHepler dbHepler;
+    String latitude;
+    String longitude;
+
 //   String oid="";
 
     /**
      * 启用onattach来获取activity调用的 onActivityresult 传递过来的参数
      * @param**/
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(final Activity activity) {
        /** 注册广播 */
+
         receiveBroadCast = new ReceiveBroadCast();
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.gasFragment");    //只有持有相同的action的接受者才能接收此广播
         activity.registerReceiver(receiveBroadCast, filter);
         super.onAttach(activity);
-        activity.unregisterReceiver(receiveBroadCast);//LS:重点！
+
     }
 
 
@@ -80,11 +91,6 @@ public class FirstFragment extends Fragment {
 
             result = intent.getExtras().getString("result");
             Log.i("log", "在discoverFragment中获取的扫描值:" + result);
-
-//            Intent intent1 = new Intent();
-//            intent1.setClass(getActivity(), PhotoActivity.class);
-//            startActivity(intent1);
-
             new Thread(new Runnable() {
             @Override
             public void run() {
@@ -94,21 +100,16 @@ public class FirstFragment extends Fragment {
                     String result1 =   spostHttpMap.posthttpmap(path,result);
                     if(result1.equals("10"))
                     {
-                        ArrayList<ListData> DataList = dbHepler.FindItemData();
-                        final ListData data = new ListData(DataList.get(0).getId(),DataList.get(0).getItemcode(),DataList.get(0).getItemname(),DataList.get(0).getItemdetail(),DataList.get(0).getUnitcode(),DataList.get(0).getItemmembers(),DataList.get(0).getLongitude(),DataList.get(0).getLatitude());
-                        if (data.getItemdetail()==null)
-                        {
-                            Toast.makeText(getContext(),"请重新扫描",Toast.LENGTH_LONG).show();
-                        }else {
                             Intent intent1 = new Intent();
                             intent1.setClass(getActivity(), PhotoActivity.class);
                             startActivity(intent1);
-                        }
+//                        }
                     }else {
                         Toast.makeText(getActivity(),"扫描错误",Toast.LENGTH_LONG).show();
                     }
                 }catch (Exception e){
                     e.printStackTrace();
+
                     Toast.makeText(getActivity(),"网络超时请试",Toast.LENGTH_LONG).show();
                 }
 
@@ -119,8 +120,6 @@ public class FirstFragment extends Fragment {
    }
 
   }
-
-
 
     /**
      * fragment的视图
@@ -135,6 +134,23 @@ public class FirstFragment extends Fragment {
         dbHepler = new DataDBHepler(getContext());
 //        initView();
 //        Time();
+//        StaticData staticData = new StaticData();
+//        final TextView textView = (TextView) view.findViewById(R.id.laitude);
+//        final TextView textView1 = (TextView) view.findViewById(R.id.longitude);
+//        textView.setText(gpsData.getLatitude());
+//        textView1.setText(gpsData.getLongitude());
+//        final Handler handler=new Handler();
+//        Runnable runnable=new Runnable() {
+//            @Override
+//            public void run() {
+//                  Log.i("tag","改变后"+gpsData.getLatitude());
+//                  textView.setText(gpsData.getLatitude());
+//                  textView1.setText(gpsData.getLongitude());
+//                handler.postDelayed(this, 3000);
+//            }
+//
+//       };
+//        handler.postDelayed(runnable, 3000);
         Button button = (Button)view.findViewById(R.id.saoma_btn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,7 +166,18 @@ public class FirstFragment extends Fragment {
                 integrator.initiateScan();
             }
         });
-
+//        Button button1 = (Button) view.findViewById(R.id.copy);
+//        button1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // 从API11开始android推荐使用android.content.ClipboardManager
+//                // 为了兼容低版本我们这里使用旧版的android.text.ClipboardManager，虽然提示deprecated，但不影响使用。
+//                ClipboardManager cm = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+//                // 将文本内容放到系统剪贴板里。
+//                cm.setText("纬度："+textView.getText()+"，经度："+textView1.getText());
+//                Toast.makeText(getActivity(), "复制成功", Toast.LENGTH_LONG).show();
+//            }
+//        });
 
         return view;
     }
@@ -181,14 +208,18 @@ public class FirstFragment extends Fragment {
                 SpostStatus = postlistData.getStatus();
 
                 ListData listData = postlistData.getValues();
+                gpsData.setLatitude(listData.getLatitude());
+                gpsData.setLongitude(listData.getLongitude());
+                gpsData data = new gpsData();
+                data.setItemcode(listData.getItemcode());
+                data.setItemdetail(listData.getItemdetail());
+                data.setItemmembers(listData.getItemmembers());
+                data.setUnitcode(listData.getUnitcode());
+                data.setItemname(listData.getItemname());
                 Log.i(TAG,"名字为："+listData.getItemname());
                 Log.i(TAG,"设备："+listData.getItemdetail());
-                if (dbHepler.isItemorData())
-                {
-                    dbHepler.updateItemdata("1",listData.getItemcode(),listData.getItemname(),listData.getItemdetail(),listData.getUnitcode(),listData.getItemmembers(),listData.getLongitude(),listData.getLatitude());
-                }else {
-                    dbHepler.addItemData("1",listData.getItemcode(),listData.getItemname(),listData.getItemdetail(),listData.getUnitcode(),listData.getItemmembers(),listData.getLongitude(),listData.getLatitude());
-                }
+                Log.i(TAG,"设备："+listData.getItemmembers());
+
             }catch (Exception e){
                 e.printStackTrace() ;
                 System.out.println("异常"+e);
@@ -196,89 +227,4 @@ public class FirstFragment extends Fragment {
             return SpostStatus;
         }
     }
-
-
-//    private void initView() {
-//        listView = view.findViewById(R.id.list_view);
-//        new Thread(new Runnable() {
-//            @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
-//            @Override
-//            public void run() {
-//                new AnotherTask().execute("");
-//            }
-//        }).start();
-//        postAdapter = new PostAdapter(getContext(), postlist);
-//        listView.setAdapter(postAdapter);
-//    }
-
-//    public void init(){
-//        postlist.clear();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                new AnotherTask().execute("");
-//            }
-//        }).start();
-//    }
-//
-//    @SuppressLint("StaticFieldLeak")
-//    private class AnotherTask extends AsyncTask<String, Void, String> {
-//        @Override
-//        protected void onPostExecute(String result) {
-//            //对UI组件的更新操作
-//            Gson gson = new Gson();
-//            PostlistData postlistData = gson.fromJson(result,PostlistData.class);
-//            try {
-//                List<ListData> listData = postlistData.getValues();
-//                if (listData == null) {
-//                    Toast.makeText(getActivity(), "数据为空", Toast.LENGTH_SHORT).show();
-//                    return;
-//                } else {
-//                    for (int i = 0; i < listData.size(); i++) {
-//                        String id = listData.get(i).getOid();
-//                        String num = listData.get(i).getAluminumcode();
-//                        String time = listData.get(i).getIdt().substring(0, 10);
-//                        ListData p = new ListData(id, num, time);
-//                        postlist.add(p);
-//                    }
-//                }
-//            }catch (Exception e)
-//            {
-//                e.printStackTrace();
-//                Toast.makeText(getContext(),"网络无连接", Toast.LENGTH_SHORT).show();
-//            }
-//            try{
-//                postAdapter.notifyDataSetChanged();
-//            }catch (Exception e){
-//                Log.e(TAG, "postlisthttp: ",e );
-//            }
-//        }
-//        @Override
-//        protected String doInBackground(String... params) {
-//            //耗时的操作
-//            String url = "http://120.78.137.182/element-plc/find-produce-information";
-//
-//            OkHttpClient client = new OkHttpClient();
-//            Gson gson = new Gson();
-//            String json = "";
-//            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-//            RequestBody requestBody = FormBody.create(JSON,json);//放进requestBoday中
-//            Request request = new Request.Builder()
-//                    .url(url)
-//                    .post(requestBody)
-//                    .build();
-//            String result ="";
-//            try {
-//                Response response = client.newCall(request).execute();
-//                //获取后台传输的额status状态码
-//                result = response.body().string();
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                Log.e(TAG, "doInBackground: ",e );
-//            }
-//            return result;
-//        }
-//    }
-//
 }
