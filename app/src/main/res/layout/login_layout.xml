@@ -11,11 +11,11 @@
     <!--android:background="#ffffff"/>-->
     <ImageView
         android:layout_below="@id/show_mainfg1_title"
-        android:layout_width="140dp"
-        android:layout_height="120dp"
+        android:layout_width="@dimen/qb_px_140"
+        android:layout_height="@dimen/qb_px_120"
         android:background="@drawable/ic_logo"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="@dimen/qb_px_50"
         tools:ignore="RtlHardcoded" />
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -28,74 +28,74 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginTop="@dimen/qb_px_20"
+            android:layout_marginLeft="@dimen/qb_px_10"
             tools:ignore="RtlHardcoded">
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="@dimen/qb_px_25"
+                android:layout_height="@dimen/qb_px_25"
                 android:layout_gravity="center"
                 android:background="@drawable/ic_user"
                 tools:ignore="ContentDescription,HardcodedText,SpUsage" />
             <EditText
                 android:id="@+id/login_user"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/qb_px_40"
                 android:textColor="#000000"
                 android:hint=" 请输入用户名"
                 android:singleLine="true"
                 android:textColorHint="#9f9f9f"
                 android:lines="1"
                 android:cursorVisible="false"
-                android:textSize="20dp"
-                android:layout_marginLeft="20dp"
+                android:textSize="@dimen/qb_px_20"
+                android:layout_marginLeft="@dimen/qb_px_20"
                 android:layout_gravity="center"
                 android:background="@drawable/edit_bg"
                 tools:ignore="HardcodedText,SpUsage,TextFields" />
         </LinearLayout>
         <View
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="@dimen/qb_px_5"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/qb_px_1"
             android:background="#9f9f9f"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="10dp"
+            android:layout_height="@dimen/qb_px_40"
+            android:layout_marginTop="@dimen/qb_px_20"
+            android:layout_marginLeft="@dimen/qb_px_10"
             tools:ignore="Orientation,RtlHardcoded">
 
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="@dimen/qb_px_25"
+                android:layout_height="@dimen/qb_px_25"
                 android:layout_gravity="center"
                 android:background="@drawable/ic_psd"
                 tools:ignore="ContentDescription,HardcodedText,SpUsage" />
                 <EditText
                     android:id="@+id/login_pass"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/qb_px_40"
                     android:textColor="#000000"
                     android:hint="请输入密码"
                     android:singleLine="true"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="@dimen/qb_px_20"
                     android:lines="1"
                     android:layout_weight="1"
                     android:textColorHint="#9f9f9f"
-                    android:textSize="20dp"
+                    android:textSize="@dimen/qb_px_20"
                     android:cursorVisible="false"
                     android:inputType="textPassword"
                     android:background="@drawable/edit_bg"
                     tools:ignore="HardcodedText,InefficientWeight,SpUsage,TextFields" />
         </LinearLayout>
         <View
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="@dimen/qb_px_5"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#9f9f9f"/>
         <LinearLayout
             android:id="@+id/linearLayout3"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/qb_px_20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -104,15 +104,15 @@
             <Button
                 android:id="@+id/login_btn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/qb_px_40"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginLeft="@dimen/qb_px_20"
+                android:layout_marginRight="@dimen/qb_px_20"
+                android:layout_marginTop="@dimen/qb_px_20"
                 android:background="@drawable/login_btn"
                 android:text="登    录"
                 android:textColor="#ffffff"
-                android:textSize="25dp"
+                android:textSize="@dimen/qb_px_23"
                 android:gravity="center"
                 tools:ignore="HardcodedText,SpUsage" />
 

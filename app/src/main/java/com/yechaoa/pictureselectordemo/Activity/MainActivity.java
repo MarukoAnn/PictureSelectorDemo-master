@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RelativeLayout secondLayout;
     private ImageView firstImage;
     private ImageView secondImage;
-    private Handler mHandler;
     private TextView firstText;
     private TextView secondText;
     // 定义几个颜色
@@ -73,15 +72,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int dark = 0xff000000;
     // 定义FragmentManager对象管理器
     private FragmentManager fragmentManager;
-    private String Creator;
     String index;
     //    final Handler handler = new Handler();
 //    private int TIME = 370000;  //每隔1s执行一次.
-    String path = "http://123.249.28.108:8081/element-admin/user/sid-update";
-    String latitude;
-    String longitude;
-    StringBuffer sb;
-
+    String path = "http://119.23.219.22:80/element-admin/user/sid-update";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,18 +124,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         secondLayout = (RelativeLayout) findViewById(R.id.second_layout);
         firstLayout.setOnClickListener(MainActivity.this);
         secondLayout.setOnClickListener(MainActivity.this);
-//        GspData();
-//        final Handler handler=new Handler();
-//        Runnable runnable=new Runnable() {
-//            @Override
-//            public void run() {
-//                GspData();
-//                handler.postDelayed(this, 3000);
-//            }
-//
-//        };
-//        handler.postDelayed(runnable, 3000);
-
 
         new Thread(new Runnable() {
             @Override
@@ -298,87 +280,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
-
-//    public void GspData() {
-//        final LocationManager locationManager;
-//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        //从GPS获取最近信息
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // TODO: Consider calling
-//            //    ActivityCompat#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                          int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for ActivityCompat#requestPermissions for more details.
-//            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
-//        }
-//        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//        //使用location 来更新EditText的显示
-//        updateView(location);
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 8, new LocationListener() {
-//            @Override
-//            public void onLocationChanged(Location location) {
-//                //当GPS 定位信息发生改变时，更新位置
-//                updateView(location);
-//            }
-//
-//            @Override
-//            public void onStatusChanged(String provider, int i, Bundle bundle) {
-//
-//            }
-//
-//            @Override
-//            public void onProviderEnabled(String provider) {
-//                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                    // TODO: Consider calling
-//                    //    ActivityCompat#requestPermissions
-//                    // here to request the missing permissions, and then overriding
-//                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//                    //                                          int[] grantResults)
-//                    // to handle the case where the user grants the permission. See the documentation
-//                    // for ActivityCompat#requestPermissions for more details.
-//
-//                    return;
-//                }
-//                updateView(locationManager.getLastKnownLocation(provider));
-//            }
-//
-//            @Override
-//            public void onProviderDisabled(String provider) {
-//
-//                updateView(null);
-//            }
-//
-//        });
-//    }
-//    public void updateView(Location newLocation){
-//        if (newLocation!=null){
-//             sb = new StringBuffer();
-//            sb.append("实时的位置信息：\n");
-//            sb.append("\n经度");
-//            sb.append(newLocation.getLongitude());
-//            sb.append("\n纬度：");
-//            sb.append(newLocation.getLatitude());
-//            Log.i(TAG,"经度:"+newLocation.getLongitude());
-//            Log.i(TAG,"纬度:"+newLocation.getLatitude());
-//            StaticData staticData = new StaticData();
-//            staticData.setGpsdata(sb.toString());
-//            gpsData.setLatitude(""+newLocation.getLatitude());
-//            gpsData.setLongitude(""+newLocation.getLongitude());
-////            latitude = ""+newLocation.getLatitude();
-////             longitude = ""+newLocation.getLongitude();
-//        }
-//    }
-
-//    public String getLongitude() {
-//        return longitude;
-//    }
-//
-//    public String getLatitude() {
-//        return latitude;
-//    }
-//    public  String getsb(){
-//        return sb.toString();
-//    }
 }

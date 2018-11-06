@@ -55,7 +55,7 @@ import okhttp3.Response;
 
 public class FirstFragment extends Fragment {
 
-    private String path = "http://123.249.28.108:8081/element-admin/item-info/find";
+    private String path = "http://119.23.219.22:80/element-admin/item-info/find";
 //    private String path ="http://192.168.28.74:8080/EquipmentInspection/item-info/find";
     private View view;
     private static final String TAG = "MainActivity";

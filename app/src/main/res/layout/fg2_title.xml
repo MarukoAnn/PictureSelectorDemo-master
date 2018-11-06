@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
-android:layout_height="56dp"
+android:layout_height="@dimen/qb_px_50"
 android:background="#16abd9"
 android:orientation="horizontal">
 <TextView
@@ -12,6 +12,6 @@ android:orientation="horizontal">
     android:layout_centerInParent="true"
     android:text="个人中心"
     android:textColor="#ffffff"
-    android:textSize="25sp"
+    android:textSize="@dimen/qb_px_25"
     tools:ignore="HardcodedText" />
 </RelativeLayout>

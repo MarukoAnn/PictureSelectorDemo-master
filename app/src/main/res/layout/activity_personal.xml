@@ -12,37 +12,37 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/qb_px_20"
         android:gravity="center"
         android:id="@+id/relativeLayout"
         android:layout_below="@id/show_set_title"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="@dimen/qb_px_10"
+            android:layout_marginRight="@dimen/qb_px_10"
             android:layout_height="wrap_content"
             android:gravity="center_vertical">
             <TextView
-                android:layout_marginLeft="9dp"
+                android:layout_marginLeft="@dimen/qb_px_9"
                 android:text="名字"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textSize="20dp"
+                android:textSize="@dimen/qb_px_20"
                 tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
             <TextView
                 android:id="@+id/personal_name"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="@dimen/qb_px_30"
                 android:gravity="center"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="@dimen/qb_px_10"
                 android:layout_weight="1"
                 tools:ignore="RtlHardcoded,TextFields" />
 
         </LinearLayout>
         <TextView
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/qb_px_10"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#6b7479"/>
@@ -50,9 +50,9 @@
             android:id="@+id/linearlayout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginLeft="@dimen/qb_px_10"
+            android:layout_marginRight="@dimen/qb_px_10"
+            android:layout_marginTop="@dimen/qb_px_20"
             android:gravity="center_vertical">
 
             <TextView
@@ -61,43 +61,43 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textSize="20dp"
+                android:textSize="@dimen/qb_px_20"
                 tools:ignore="HardcodedText,RtlHardcoded" />
             <TextView
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="@dimen/qb_px_5"
                 android:id="@+id/personal_idnum"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="@dimen/qb_px_30"
                 android:gravity="center"
                 android:layout_weight="1"
                 tools:ignore="RtlHardcoded" />
         </LinearLayout>
         <TextView
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/qb_px_10"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#6b7479"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginTop="@dimen/qb_px_20"
+            android:layout_marginLeft="@dimen/qb_px_10"
+            android:layout_marginRight="@dimen/qb_px_10"
             android:gravity="center_vertical">
             <TextView
-                android:layout_marginLeft="9dp"
+                android:layout_marginLeft="@dimen/qb_px_9"
                 android:text="电话"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
+                android:textSize="@dimen/qb_px_20"
                 android:gravity="center"
                 tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
 
             <TextView
                 android:id="@+id/personal_phone"
-                android:layout_width="298dp"
-                android:layout_height="30dp"
-                android:layout_marginLeft="5dp"
+                android:layout_width="@dimen/qb_px_298"
+                android:layout_height="@dimen/qb_px_30"
+                android:layout_marginLeft="@dimen/qb_px_5"
                 android:layout_weight="2"
                 android:gravity="center"
                 tools:ignore="InefficientWeight,RtlHardcoded,TextFields" />
@@ -109,7 +109,7 @@
                 <!--android:text=">"/>-->
         </LinearLayout>
         <TextView
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/qb_px_10"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#6b7479"/>

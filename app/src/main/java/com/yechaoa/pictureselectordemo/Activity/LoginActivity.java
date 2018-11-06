@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -48,11 +49,10 @@ public class LoginActivity extends Activity {
     private DownloadUtil downloadUtils;
 
     String url;
-    EditText username;
-    EditText password;
-    Button login_btn;
-    String path = "http://123.249.28.108:8081/element-admin/user/login";
-    String Loginurl = "http://123.249.28.108:8081/element-admin/user/logout";
+    EditText usernameEt;
+    EditText passwordEt;
+        Button loginBtn;
+    String path = "http://119.23.219.22:80/element-admin/user/login";
     DataDBHepler dbHepler;
     String result;
     String Username;
@@ -90,24 +90,24 @@ public class LoginActivity extends Activity {
         {
             e.printStackTrace();
         }
-        username.setCursorVisible(false);
-        password.setCursorVisible(false);
-        username.setText(Username);
-        password.setText(Password);
-        username.setOnClickListener(new View.OnClickListener() {
+        usernameEt.setCursorVisible(false);
+        passwordEt.setCursorVisible(false);
+        usernameEt.setText(Username);
+        passwordEt.setText(Password);
+        usernameEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                username.setCursorVisible(true);
+                usernameEt.setCursorVisible(true);
             }
         });
-        password.setOnClickListener(new View.OnClickListener() {
+        passwordEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                password.setCursorVisible(true);
+                passwordEt.setCursorVisible(true);
             }
         });
 
-        login_btn.setOnClickListener( new View.OnClickListener() {
+        loginBtn.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ConnectivityManager connectivityManager =(ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
@@ -121,11 +121,11 @@ public class LoginActivity extends Activity {
                     public void run() {
                         Looper.prepare();
                         try {
-                            if(username.getText().toString().equals("")||password.getText().toString().equals(""))
+                            if(TextUtils.isEmpty(usernameEt.getText().toString().trim())||TextUtils.isEmpty(passwordEt.getText().toString().trim()))
                             {
                                 Toast.makeText(LoginActivity.this, "用户名或密码不能为空", Toast.LENGTH_SHORT).show();
                             }
-                            result = GetPostLogin(username.getText().toString(), password.getText().toString(), path);
+                            result = GetPostLogin(usernameEt.getText().toString(), passwordEt.getText().toString(), path);
                         }catch (Exception e)
                         {
                             e.printStackTrace();
@@ -133,21 +133,14 @@ public class LoginActivity extends Activity {
                         }
                         try {
                             if (result.equals("10")) {
-//                                String postsid = selectSid();
-//                                if(postSidhttp(postsid)!=null) {
-
+//
                                     if (dbHepler.isIdoruserpass())
                                     {
-                                        dbHepler.updateUserpass(username.getText().toString(),password.getText().toString());
+                                        dbHepler.updateUserpass(usernameEt.getText().toString(),passwordEt.getText().toString());
                                     }else {
-                                        dbHepler.addUserpass("1",username.getText().toString(),password.getText().toString());
+                                        dbHepler.addUserpass("1",usernameEt.getText().toString(),passwordEt.getText().toString());
                                     }
-//                                    if (dbHepler.isIdorUser()) {
-//                                        dbHepler.updateUser(username.getText().toString(), realName, homeTelephone, birthday, phone);
-//                                    } else {
-//                                        dbHepler.addUser("1", username.getText().toString(), realName, homeTelephone, birthday, phone);
-//                                    }
-//                                }
+//
                                 Toast.makeText(getApplicationContext(), "登录成功", Toast.LENGTH_SHORT).show();//提示用户登录成功
                                 Intent intent = new Intent();
                                 intent.setClass(LoginActivity.this,MainActivity.class);
@@ -162,6 +155,7 @@ public class LoginActivity extends Activity {
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "网络错误或服务器故障", Toast.LENGTH_SHORT).show();//提示用户登录失败
                         }
                         Looper.loop();
                     }
@@ -172,9 +166,9 @@ public class LoginActivity extends Activity {
     }
     //控件初始化
     public void ViewLayout() {
-        login_btn = (Button) findViewById(R.id.login_btn);
-        username = (EditText) findViewById(R.id.login_user);
-        password = (EditText) findViewById(R.id.login_pass);
+        loginBtn = (Button) findViewById(R.id.login_btn);
+        usernameEt = (EditText) findViewById(R.id.login_user);
+        passwordEt = (EditText) findViewById(R.id.login_pass);
     }
 
     public void init() {

@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,13 +95,11 @@ public class PhotoActivity extends Activity {
     List<String>valueslist = new ArrayList<>();//装载点击设备的状态
     List<String>namelist = new ArrayList<>();//装载参与巡检的人员
     List<String> valuesResult;//装载参与巡检的人员
-    String[] valuse = new String[]{};//装载点击设备的状态
-    String[] name=new String[]{};//装载参与巡检的人员
     List<File> file = new ArrayList<>();
     String[] itemlist;
     double longitude;
     double latitude;
-    String path = "http://123.249.28.108:8081/element-admin/picture-upload";
+    String path = "http://119.23.219.22:80/element-admin/picture-upload";
     ZLoadingDialog dialog = new ZLoadingDialog(PhotoActivity.this);
 
     @Override
@@ -381,7 +380,7 @@ public class PhotoActivity extends Activity {
             }
             final TextView tv = (TextView) view.findViewById(R.id.equipment);
             tv.setText(List.get(position));
-            RadioGroup radioGroup =(RadioGroup)view.findViewById(R.id.Radiogroup);
+            final RadioGroup radioGroup =(RadioGroup)view.findViewById(R.id.Radiogroup);
             radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -389,18 +388,7 @@ public class PhotoActivity extends Activity {
                     String tip = checkedId ==R.id.checkBox?"正常":"异常";
 //                    valuse[position]=tip;
                     valueslist.set(position,tip);
-//                    valueslist.add("\""+List.get(position)+"\""+":"+"\""+tip+"\"");
 
-//                    System.out.println(List.get(position)+":"+tip);
-
-//                    List<String> dsdd=new ArrayList<>();
-//                    dsdd.add("\""+List.get(position)+"\""+":"+"\""+tip+"\"");
-//                    valueslist.add(dsdd);
-//                    System.out.println(dsdd.toString().replace("[","").replace("]",""));
-//                    List<Object> dsd = new ArrayList<>();
-//
-//                    dsd.add(dsdd);
-//                    System.out.println(dsd);
                     Log.i(TAG,"设备状态"+tip);
 
                 }
@@ -597,9 +585,8 @@ public class PhotoActivity extends Activity {
                 }catch (Exception e)
                 {
                     e.printStackTrace();
-                    dialog.dismiss();
                     Toast.makeText(PhotoActivity.this, "网络错误", Toast.LENGTH_LONG).show();
-
+                    dialog.dismiss();
                 }
 
             }
@@ -738,7 +725,7 @@ public class PhotoActivity extends Activity {
                     .addFormDataPart("imagetype", imageType)
                     .build();
             Request request = new Request.Builder()
-                    .url("http://192.168.28.151:8081/element-admin/picture-upload")
+                    .url(path)
                     .post(requestBody)
                     .build();
             System.out.println(path);
@@ -862,8 +849,6 @@ public class PhotoActivity extends Activity {
 
 //            File[] files = file.listFiles();
 //            File[] files = file.listFiles();
-
-
 
 //            String path = "http://120.78.137.182/element-admin/picture-upload";
             String SpostStatus = null;

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
-android:layout_height="30dp"
+android:layout_height="@dimen/qb_px_50"
 android:background="#000000"
 android:orientation="horizontal">
 <TextView
@@ -11,7 +11,7 @@ android:orientation="horizontal">
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
     android:text="用户登陆"
-    android:textSize="20dp"
+    android:textSize="@dimen/qb_px_20"
     android:textColor="#fe6718"
     tools:ignore="HardcodedText,SpUsage" />
 </RelativeLayout>

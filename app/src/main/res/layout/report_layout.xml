@@ -6,7 +6,7 @@
     android:background="#e5e1d5"
     android:focusableInTouchMode="true">
 <ScrollView
-    android:layout_margin="10dp"
+    android:layout_margin="@dimen/qb_px_10"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
@@ -24,15 +24,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="检查项目"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/qb_px_10"
             android:layout_centerHorizontal="true"
-            android:textSize="18dp"
+            android:textSize="@dimen/qb_px_18"
             android:textStyle="bold"
             android:background="#fff"
             tools:ignore="HardcodedText,SpUsage" />
         <ScrollView
             android:id="@+id/listitem"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/qb_px_10"
             android:layout_below="@id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
                 <ListView
                     android:id="@+id/list_item"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp">
+                    android:layout_height="@dimen/qb_px_200">
 
                 </ListView>
             </LinearLayout>
@@ -53,7 +53,7 @@
         <LinearLayout
             android:layout_below="@id/relativeLayout1"
             android:id="@+id/linearLayout5"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/qb_px_10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -65,10 +65,10 @@
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@+id/image"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/qb_px_10"
                 android:gravity="center"
                 android:text="故障描述："
-                android:textSize="20dp"
+                android:textSize="@dimen/qb_px_20"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText,SpUsage"
                 android:layout_toRightOf="@+id/image" />
@@ -77,10 +77,10 @@
                 android:id="@+id/describe_text"
                 android:layout_below="@id/describe"
                 android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_height="100dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginTop="@dimen/qb_px_10"
+                android:layout_height="@dimen/qb_px_100"
+                android:layout_marginLeft="@dimen/qb_px_20"
+                android:layout_marginRight="@dimen/qb_px_20"
                 android:minLines="8"
                 android:maxLines="10"
                 android:enabled="true"
@@ -95,26 +95,26 @@
                 android:id="@+id/image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/qb_px_10"
                 android:text="添加图片："
-                android:textSize="16dp"
+                android:textSize="@dimen/qb_px_16"
                 android:textStyle="bold"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="@dimen/qb_px_20"
                 tools:ignore="HardcodedText,SpUsage"
-                android:layout_marginStart="20dp" />
+                android:layout_marginStart="@dimen/qb_px_20" />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginLeft="@dimen/qb_px_20"
+                android:layout_marginRight="@dimen/qb_px_20"
+                android:layout_marginTop="@dimen/qb_px_5"
                 android:overScrollMode="never"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="@dimen/qb_px_10"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/linearLayout6"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/qb_px_10"
             android:layout_below="@id/linearLayout5"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -125,10 +125,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/qb_px_10"
                 android:text="巡检人员："
-                android:textSize="20dp"
-                android:layout_marginLeft="20dp"
+                android:textSize="@dimen/qb_px_20"
+                android:layout_marginLeft="@dimen/qb_px_20"
                 tools:ignore="HardcodedText,NotSibling,RtlHardcoded,SpUsage" />
             <ScrollView
                 android:id="@+id/grid"
@@ -141,9 +141,9 @@
                     <GridView
                         android:id="@+id/grid_check"
                         android:layout_width="match_parent"
-                        android:layout_height="90dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginLeft="20dp"
+                        android:layout_height="@dimen/qb_px_90"
+                        android:layout_marginRight="@dimen/qb_px_20"
+                        android:layout_marginLeft="@dimen/qb_px_20"
                         android:stretchMode="columnWidth"
                         android:numColumns="3">
                     </GridView>
@@ -155,13 +155,14 @@
         <Button
             android:id="@+id/Submit"
             android:layout_below="@id/linearLayout6"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/qb_px_20"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="@dimen/qb_px_40"
             android:layout_centerHorizontal="true"
             android:text="确认提交"
             android:textColor="#fff"
             android:background="#51cd52"
+            android:textSize="@dimen/qb_px_16"
             tools:ignore="HardcodedText" />
         </RelativeLayout>
    </ScrollView>

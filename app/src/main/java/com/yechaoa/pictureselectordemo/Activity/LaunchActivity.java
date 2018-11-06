@@ -19,9 +19,8 @@ import java.util.ArrayList;
  */
 
 public class LaunchActivity extends Activity {
-    String Loginurl = "http://123.249.28.108:8081/element-admin/user/logout";
     String Msid = null;
-    String result;
+    String updateApkUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +79,7 @@ public class LaunchActivity extends Activity {
                 try {
                     try {
                         UpdateHttp updateHttp = new UpdateHttp();
-                        result = updateHttp.updatePostHttp();
+                        updateApkUrl = updateHttp.updatePostHttp();
                     }catch (Exception e)
                     {
                         e.printStackTrace();
@@ -94,7 +93,7 @@ public class LaunchActivity extends Activity {
                     public void run() {
                         try {
                             if (Msid!=null) {
-                                if (result == null) {
+                                if (updateApkUrl == null) {
 
                                     Intent intent = new Intent();
                                     intent.putExtra("url", "null");
@@ -105,7 +104,7 @@ public class LaunchActivity extends Activity {
                                     LaunchActivity.this.finish();
                                 } else {
                                     Intent intent = new Intent();
-                                    intent.putExtra("url", result);
+                                    intent.putExtra("url", updateApkUrl);
                                     //跳转至 MainActivity
                                     intent.setClass(LaunchActivity.this, MainActivity.class);
                                     startActivity(intent);
@@ -113,7 +112,7 @@ public class LaunchActivity extends Activity {
                                     LaunchActivity.this.finish();
                                 }
                             }else {
-                                    if (result == null) {
+                                    if (updateApkUrl == null) {
                                         Intent intent = new Intent();
                                         intent.putExtra("url", "null");
                                         //跳转至 MainActivity
@@ -123,7 +122,7 @@ public class LaunchActivity extends Activity {
                                         LaunchActivity.this.finish();
                                     } else {
                                         Intent intent = new Intent();
-                                        intent.putExtra("url", result);
+                                        intent.putExtra("url", updateApkUrl);
                                         //跳转至 MainActivity
                                         intent.setClass(LaunchActivity.this, LoginActivity.class);
                                         startActivity(intent);

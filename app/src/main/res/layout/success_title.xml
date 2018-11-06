@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="horizontal"
-    android:layout_height="56dp"
+    android:layout_height="@dimen/qb_px_50"
     android:background="#444e5a">
     <ImageView
         android:id="@+id/fahui"
-        android:layout_width="40dp"
-        android:layout_height="35dp"
+        android:layout_width="@dimen/qb_px_40"
+        android:layout_height="@dimen/qb_px_35"
         android:layout_gravity="center"
         android:background="@drawable/ic_successreturnl"
         tools:ignore="ContentDescription" />
@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="提交情况"
-        android:textSize="24dp"
+        android:textSize="@dimen/qb_px_24"
         android:layout_gravity="center"
         android:gravity="center"
         android:textColor="#ffffff"

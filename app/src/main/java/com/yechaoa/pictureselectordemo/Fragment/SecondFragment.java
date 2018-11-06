@@ -32,7 +32,7 @@ import java.util.ArrayList;
  */
 public class SecondFragment extends Fragment {
     private View view;
-    String url = "http://123.249.28.108:8081/element-admin/user/logout";
+    String url = "http://119.23.219.22:80/element-admin/user/logout";
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fg2, container, false);

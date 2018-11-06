@@ -38,14 +38,9 @@ import static android.content.ContentValues.TAG;
 public class PersonalActivity extends Activity {
 
 
-    private String realName;
-    private String homeTelephone;
-    private String phone;
-    private String birthday;
-
-    private TextView name;
-    private TextView p_phone;
-    private TextView idnum;
+    private TextView nameTv;
+    private TextView phoneTv;
+    private TextView idnumTv;
     @SuppressLint("WrongViewCast")
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,9 +98,9 @@ public class PersonalActivity extends Activity {
 
                     ReturnPostData returnPostData = rSpostData.getData();
 
-                    name.setText(returnPostData.getRealName());
-                    p_phone.setText(returnPostData.getPhone());
-                    idnum.setText(returnPostData.getIdCode());
+                    nameTv.setText(returnPostData.getRealName());
+                    phoneTv.setText(returnPostData.getPhone());
+                    idnumTv.setText(returnPostData.getIdCode());
 
                 }catch (Exception e){
                     Log.e(TAG, "postlisthttp: ",e );
@@ -116,7 +111,7 @@ public class PersonalActivity extends Activity {
                 //耗时的操作
                 String SidStatus = null;
                 String result = null;
-                String url = "http://123.249.28.108:8081/element-admin/user/query-self";
+                String url = "http://119.23.219.22:80/element-admin/user/query-self";
                 OkHttpClient client = new OkHttpClient();
                 Gson gson = new Gson();
 
@@ -147,8 +142,8 @@ public class PersonalActivity extends Activity {
         }
 
     public  void init(){
-        name = (TextView) findViewById(R.id.personal_name);
-        p_phone = (TextView) findViewById(R.id.personal_phone);
-        idnum = (TextView) findViewById(R.id.personal_idnum);
+        nameTv = (TextView) findViewById(R.id.personal_name);
+        phoneTv = (TextView) findViewById(R.id.personal_phone);
+        idnumTv = (TextView) findViewById(R.id.personal_idnum);
     }
 }
