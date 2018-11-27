@@ -1,21 +1,32 @@
 package com.yechaoa.pictureselectordemo.Fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 
 import com.github.zackratos.ultimatebar.UltimateBar;
+import com.google.gson.Gson;
 import com.yechaoa.pictureselectordemo.Activity.BbenActivity;
 import com.yechaoa.pictureselectordemo.Activity.LaunchActivity;
 import com.yechaoa.pictureselectordemo.Activity.PersonalActivity;
 import com.yechaoa.pictureselectordemo.Activity.Setpsw;
+import com.yechaoa.pictureselectordemo.Modle.RSpostData;
+import com.yechaoa.pictureselectordemo.Modle.ResultData;
+import com.yechaoa.pictureselectordemo.Modle.ReturnPostData;
 import com.yechaoa.pictureselectordemo.Modle.SidSelectData;
 import com.yechaoa.pictureselectordemo.R;
+import com.yechaoa.pictureselectordemo.Util.CircleImageView;
 import com.yechaoa.pictureselectordemo.Util.DataDBHepler;
+import com.yechaoa.pictureselectordemo.Util.SavePamasInfo;
 import com.yechaoa.pictureselectordemo.Util.SelecthttpUserUtil;
 
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +34,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+import static android.content.ContentValues.TAG;
 
 
 /**
@@ -32,11 +53,14 @@ import java.util.ArrayList;
  */
 public class SecondFragment extends Fragment {
     private View view;
-    String url = "http://119.23.219.22:80/element-admin/user/logout";
+    TextView        tv_userCode;
+    String          url            = "http://119.23.219.22:80/element-admin/user/logout";
+    SavePamasInfo   mSavePamasInfo = new SavePamasInfo();
+    CircleImageView mCircleImageView;
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fg2, container, false);
-
+        mCircleImageView =view.findViewById(R.id.h_head);
 
         TextView tv =(TextView) view.findViewById(R.id.change_paw);
         tv.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +83,13 @@ public class SecondFragment extends Fragment {
                 startActivity(new Intent(getActivity(),BbenActivity.class));
             }
         });
+        tv_userCode = view.findViewById(R.id.userCode);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new AnotherTask().execute("");
+            }
+        }).start();
         /**
          *  登出
          */
@@ -125,6 +156,74 @@ public class SecondFragment extends Fragment {
         final String Msid = data.getSid();//获取数据库里的sid
         return Msid;
     }
+    @SuppressLint("StaticFieldLeak")
+    private class AnotherTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPostExecute(String result) {
+            //对UI组件的更新操作
+            Gson gson = new Gson();
+            try {
+                RSpostData rSpostData= gson.fromJson(result, RSpostData.class);
+                Log.i(TAG,"data数据为："+rSpostData.getData());
 
+                ReturnPostData returnPostData = rSpostData.getData();
+                tv_userCode.setText("工号："+returnPostData.getUserCode());
 
+            }catch (Exception e){
+                Toast.makeText(getContext(),"数据刷新错误",Toast.LENGTH_LONG).show();
+                Log.e(TAG, "postlisthttp: ",e );
+            }
+        }
+        @Override
+        protected String doInBackground(String... params) {
+            //耗时的操作
+            String result = null;
+            String url = "http://119.23.219.22:80/element-admin/user/query-self";
+            OkHttpClient client = new OkHttpClient();
+            Gson gson = new Gson();
+
+            ResultData mdata = new ResultData();
+            String sid =SelectSid();
+
+            mdata.setSid(sid);
+
+            String json = gson.toJson(mdata);//将其转换为JSON数据格式
+
+            MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+
+            RequestBody requestBody = RequestBody.create(mediaType, json);//放进requestBoday中
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(requestBody)
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();
+                result = response.body().string();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e(TAG, "doInBackground: ",e );
+            }
+            return result;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i("tag","在线");
+        String path = null;
+        try {
+            path = mSavePamasInfo.getInfo(getContext(),"imgPath","file");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (path.equals("")){
+
+            mCircleImageView.setImageResource(R.drawable.ic_header);
+        }else {
+            Bitmap bm = BitmapFactory.decodeFile(path);
+            mCircleImageView.setImageBitmap(bm);
+        }
+    }
 }

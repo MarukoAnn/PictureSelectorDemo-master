@@ -3,44 +3,37 @@ package com.yechaoa.pictureselectordemo.Fragment;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 
 import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.zackratos.ultimatebar.UltimateBar;
 import com.google.gson.Gson;
-import com.yechaoa.pictureselectordemo.Activity.MainActivity;
+import com.uuzuche.lib_zxing.activity.CaptureActivity;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
+import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.yechaoa.pictureselectordemo.Activity.PhotoActivity;
-import com.yechaoa.pictureselectordemo.Activity.ScanActivity;
 
 
 import com.yechaoa.pictureselectordemo.Modle.ListData;
 import com.yechaoa.pictureselectordemo.Modle.PostlistData;
-import com.yechaoa.pictureselectordemo.Modle.StaticData;
 import com.yechaoa.pictureselectordemo.Modle.gpsData;
 import com.yechaoa.pictureselectordemo.Util.DataDBHepler;
 import com.yechaoa.pictureselectordemo.R;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-
-import java.util.ArrayList;
 
 
 import okhttp3.FormBody;
@@ -56,70 +49,11 @@ import okhttp3.Response;
 public class FirstFragment extends Fragment {
 
     private String path = "http://119.23.219.22:80/element-admin/item-info/find";
-//    private String path ="http://192.168.28.74:8080/EquipmentInspection/item-info/find";
     private View view;
     private static final String TAG = "MainActivity";
-    private Handler mHandler;
-    private ReceiveBroadCast receiveBroadCast;
-    String result;
     DataDBHepler dbHepler;
-    String latitude;
-    String longitude;
+    private static final int REQUEST_CODE = 1;
 
-//   String oid="";
-
-    /**
-     * 启用onattach来获取activity调用的 onActivityresult 传递过来的参数
-     * @param**/
-    @Override
-    public void onAttach(final Activity activity) {
-       /** 注册广播 */
-
-        receiveBroadCast = new ReceiveBroadCast();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("com.gasFragment");    //只有持有相同的action的接受者才能接收此广播
-        activity.registerReceiver(receiveBroadCast, filter);
-        super.onAttach(activity);
-
-    }
-
-
-
-    class ReceiveBroadCast extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-
-            result = intent.getExtras().getString("result");
-            Log.i("log", "在discoverFragment中获取的扫描值:" + result);
-            new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                SpostHttpMap spostHttpMap = new SpostHttpMap();
-                try {
-                    String result1 =   spostHttpMap.posthttpmap(path,result);
-                    if(result1.equals("10"))
-                    {
-                            Intent intent1 = new Intent();
-                            intent1.setClass(getActivity(), PhotoActivity.class);
-                            startActivity(intent1);
-//                        }
-                    }else {
-                        Toast.makeText(getActivity(),"扫描错误",Toast.LENGTH_LONG).show();
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-
-                    Toast.makeText(getActivity(),"网络超时请试",Toast.LENGTH_LONG).show();
-                }
-
-          Looper.loop();
-      }
-     }).start();
-
-   }
-
-  }
 
     /**
      * fragment的视图
@@ -131,6 +65,7 @@ public class FirstFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fg1, container, false);
+        ZXingLibrary.initDisplayOpinion(getActivity());
         dbHepler = new DataDBHepler(getContext());
 //        initView();
 //        Time();
@@ -155,15 +90,8 @@ public class FirstFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentIntegrator integrator =new IntentIntegrator(getActivity());
-                // 设置要扫描的条码类型，ONE_D_CODE_TYPES：一维码，QR_CODE_TYPES-二维码
-                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-                integrator.setCaptureActivity(ScanActivity.class);
-                integrator.setPrompt("请扫描二维码"); //底部的提示文字，设为""可以置空
-                integrator.setCameraId(0); //前置或者后置摄像头
-                integrator.setBeepEnabled(false); //扫描成功的「哔哔」声，默认开启
-                integrator.setBarcodeImageEnabled(true);//是否保留扫码成功时候的截图
-                integrator.initiateScan();
+                Intent intent = new Intent(getActivity(), CaptureActivity.class);
+                startActivityForResult(intent, REQUEST_CODE);
             }
         });
 //        Button button1 = (Button) view.findViewById(R.id.copy);
@@ -225,6 +153,52 @@ public class FirstFragment extends Fragment {
                 System.out.println("异常"+e);
             }
             return SpostStatus;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE) {
+            //处理扫描结果（在界面上显示）
+            if (null != data) {
+                Bundle bundle = data.getExtras();
+                if (bundle == null) {
+                    return;
+                }
+                if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
+                    final String result = bundle.getString(CodeUtils.RESULT_STRING);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Looper.prepare();
+                            SpostHttpMap spostHttpMap = new SpostHttpMap();
+                            try {
+                                String result1 =   spostHttpMap.posthttpmap(path,result);
+                                if(result1.equals("10"))
+                                {
+                                    Intent intent1 = new Intent();
+                                    intent1.setClass(getActivity(), PhotoActivity.class);
+                                    startActivity(intent1);
+//                        }
+                                }else {
+                                    Toast.makeText(getActivity(),"扫描错误",Toast.LENGTH_LONG).show();
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+
+                                Toast.makeText(getActivity(),"网络超时请试",Toast.LENGTH_LONG).show();
+                            }
+
+                            Looper.loop();
+                        }
+                    }).start();
+                    Log.i("tag","结果："+result);
+                } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+                    Toast.makeText(getActivity(), "解析二维码失败", Toast.LENGTH_LONG).show();
+                }
+            }
         }
     }
 }

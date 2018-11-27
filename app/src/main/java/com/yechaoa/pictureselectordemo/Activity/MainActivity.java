@@ -2,6 +2,7 @@ package com.yechaoa.pictureselectordemo.Activity;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import android.os.Looper;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -32,18 +34,16 @@ import android.widget.ImageView;
 
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.github.zackratos.ultimatebar.UltimateBar;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import com.yechaoa.pictureselectordemo.Fragment.FirstFragment;
 import com.yechaoa.pictureselectordemo.Fragment.SecondFragment;
 
 import com.yechaoa.pictureselectordemo.Modle.SidSelectData;
-import com.yechaoa.pictureselectordemo.Modle.StaticData;
-import com.yechaoa.pictureselectordemo.Modle.gpsData;
+
 import com.yechaoa.pictureselectordemo.R;
 import com.yechaoa.pictureselectordemo.Util.DataDBHepler;
 import com.yechaoa.pictureselectordemo.Util.SpostupdateHttp;
@@ -258,26 +258,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * MainActivity 里重写onActiovityResult的方法
-     * @param requestCode
-     * @param resultCode
-     * @param data
      */
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (intentResult != null) {
-            if (intentResult.getContents() == null) {
-            } else {
-                String result = intentResult.getContents();
-//                DiscoverFragment fragment = new DiscoverFragment();
-//                fragment.setResult(result);
-                Intent intent = new Intent();
-                intent.setAction("com.gasFragment"); // 设置你这个广播的action
-                intent.putExtra("result",result);
-                sendBroadcast(intent);
-                Log.i("log", "进入onActivityResult" + result);
-            }
+    public void openGps(final Context context) {
+        LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+        // 判断GPS模块是否开启，如果没有则开启
+        if (!locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
+            Toast.makeText(context, "请打开GPS", Toast.LENGTH_SHORT).show();
+            final android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(context);
+            dialog.setTitle("请打开GPS连接");
+            dialog.setMessage("为了方便任务通知您，请先打开GPS");
+            dialog.setPositiveButton("设置", new android.content.DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    // 转到手机设置界面，用户设置GPS
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    Toast.makeText(context, "打开后直接点击返回键即可，若不打开返回下次将再次出现", Toast.LENGTH_SHORT).show();
+                    ((Activity)(context)).startActivityForResult(intent, 0); // 设置完成后返回到原来的界面
+                }
+            });
+            dialog.setNeutralButton("取消", new android.content.DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    arg0.dismiss();
+                }
+            });
+            dialog.show();
         }
+    }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        openGps(this);
     }
 }

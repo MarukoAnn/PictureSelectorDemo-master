@@ -61,17 +61,7 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
-        //从GPS获取最近信息
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
-        }
+
         ViewLayout();
         init();
         dbHepler = new DataDBHepler(getBaseContext());
@@ -149,7 +139,11 @@ public class LoginActivity extends Activity {
                             } else if (result.equals("12")) {
                                 Toast.makeText(getApplicationContext(), "登录失败，服务器故障", Toast.LENGTH_SHORT).show();//提示用户登录失败
                             } else if (result.equals("14")) {
-                                Toast.makeText(getApplicationContext(), "登录失败，用户已存在不能重复登录", Toast.LENGTH_SHORT).show();//提示用户登录失败
+                                Toast.makeText(getApplicationContext(), "登录成功", Toast.LENGTH_SHORT).show();//提示用户登录成功
+                                Intent intent = new Intent();
+                                intent.setClass(LoginActivity.this,MainActivity.class);
+                                startActivity(intent);
+                                finish();
                             } else {
                                 Toast.makeText(getApplicationContext(), "登录失败，用户名或密码错误", Toast.LENGTH_SHORT).show();//提示用户登录失败
                             }
@@ -249,60 +243,4 @@ public class LoginActivity extends Activity {
         return postStatus;
     }
 
-
-    /**
-     * 获取数据到数据库
-     * @param Sid
-     * @return
-     */
-//    public String postSidhttp(String Sid) {
-//        String  SidStatus = null;
-//        String url = "http://120.78.137.182/element-admin/user/query-self";
-//        OkHttpClient client = new OkHttpClient();
-//        Gson gson = new Gson();
-//
-//        ResultData mdata = new ResultData();
-//
-//        mdata.setSid(Sid);
-//
-//        String json = gson.toJson(mdata);//将其转换为JSON数据格式
-//
-//        MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
-//
-//        RequestBody requestBody = RequestBody.create(mediaType, json);//放进requestBoday中
-//        Request request = new Request.Builder()
-//                .url(url)
-//                .post(requestBody)
-//                .build();
-//        try {
-//            Response response = client.newCall(request).execute();
-//            String result = response.body().string();
-//
-//            Log.i(TAG,"访问网络"+result);
-//
-//            RSpostData rSpostData= gson.fromJson(result, RSpostData.class);
-//            Log.i(TAG,"data数据为："+rSpostData.getData());
-//
-//            ReturnPostData returnPostData = rSpostData.getData();
-//
-//            realName = returnPostData.getRealName();
-//            homeTelephone = returnPostData.getHomeTelephone();
-//            phone = returnPostData.getPhone();
-//            birthday = returnPostData.getBirthday();
-//            SidStatus = rSpostData.getStatus();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return SidStatus;
-////    }
-//
-//    public String  selectSid(){
-//        DataDBHepler dataDBHepler = new DataDBHepler(getBaseContext());
-//        ArrayList<SidSelectData> DataList = dataDBHepler.FindSidData();
-//        final SidSelectData data = new SidSelectData(DataList.get(0).getId(),DataList.get(0).getSid());
-//        Log.i(TAG,"数据库的sid为："+data.getSid());
-//        final String Msid = data.getSid();
-//        return Msid;
-//    }
 }

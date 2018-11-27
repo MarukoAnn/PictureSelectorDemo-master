@@ -35,6 +35,7 @@
         android:layout_below="@+id/text1"
         android:text="请点击扫码完成巡检任务"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/qb_px_10"
         android:textSize="@dimen/qb_px_20"
         tools:ignore="HardcodedText" />
 
@@ -43,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/qb_px_40"
         android:layout_below="@id/text2"
-        android:layout_marginTop="@dimen/qb_px_20"
+        android:layout_marginTop="@dimen/qb_px_40"
         android:layout_marginLeft="@dimen/qb_px_80"
         android:layout_marginRight="@dimen/qb_px_80"
         android:background="@drawable/saoma_btn"

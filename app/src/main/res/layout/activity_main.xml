@@ -33,7 +33,7 @@
                 android:orientation="vertical"
                 tools:ignore="UseCompoundDrawables,UselessParent">
                 <ImageView
-                    android:layout_marginTop="@dimen/qb_px_2"
+                    android:layout_marginTop="@dimen/qb_px_1"
                     android:id="@+id/first_image"
                     android:layout_width="@dimen/qb_px_40"
                     android:layout_height="@dimen/qb_px_38"
@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/qb_px_2"
+                    android:layout_marginTop="@dimen/qb_px_1"
                     android:text="首      页"
                     android:textSize="@dimen/qb_px_16"
                     tools:ignore="HardcodedText" />
@@ -64,7 +64,7 @@
                 tools:ignore="UseCompoundDrawables,UselessParent">
                 <ImageView
                     android:id="@+id/second_image"
-                    android:layout_marginTop="@dimen/qb_px_2"
+                    android:layout_marginTop="@dimen/qb_px_1"
                     android:layout_width="@dimen/qb_px_40"
                     android:layout_height="@dimen/qb_px_38"
                     android:layout_gravity="center_horizontal"
@@ -75,7 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/qb_px_2"
+                    android:layout_marginTop="@dimen/qb_px_1"
                     android:text="个人中心"
                     android:textSize="@dimen/qb_px_16"
                     tools:ignore="HardcodedText,SpUsage" />

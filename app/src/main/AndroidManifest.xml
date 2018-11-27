@@ -26,7 +26,8 @@
         android:icon="@drawable/app_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".Activity.LaunchActivity" android:theme="@style/ImageTranslucentTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -36,8 +37,6 @@
         </activity>
         <activity android:name=".Activity.PhotoActivity"
             tools:ignore="InnerclassSeparator" android:theme="@style/ImageTranslucentTheme" />
-        <activity android:name=".Activity.ScanActivity"
-            tools:ignore="InnerclassSeparator" />
         <activity android:name=".Activity.MainActivity"
             tools:ignore="InnerclassSeparator" >
             <!--<intent-filter>-->

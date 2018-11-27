@@ -3,6 +3,7 @@ package com.yechaoa.pictureselectordemo.Activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,8 +12,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -84,12 +88,13 @@ public class PhotoActivity extends Activity {
     private GridImageAdapter adapter;
     private RecyclerView mRecyclerView;
     private PopupWindow pop;
+    Runnable runnable;
+    Handler handler;
     GridView gridView;
     ListView listView ;
     Button button ;
     EditText describe;
     List<String> Path = new ArrayList<>();
-    DataDBHepler dbHepler;
     List<String> listitem= new ArrayList<>();//设备单选框列表
     List<String> listcheck= new ArrayList<>();//多选框
     List<String>valueslist = new ArrayList<>();//装载点击设备的状态
@@ -121,7 +126,8 @@ public class PhotoActivity extends Activity {
             String itemmembers = data1.getItemmembers();
             Log.i(TAG,"itemmembers:"+data1.getItemmembers());
             Log.i(TAG,"设备"+data1.getItemdetail());
-            Log.i(TAG,"经度"+gpsData.getLatitude());
+            Log.i(TAG,"经度"+latitude);
+            Log.i(TAG,"维度"+longitude);
             itemlist= itemdetail.split("，");
             for (int i=0;i<itemlist.length;i++)
             {
@@ -142,7 +148,6 @@ public class PhotoActivity extends Activity {
             GridAdapter gridAdapter = new GridAdapter(getBaseContext(),listcheck);
             gridView.setAdapter(gridAdapter);
 
-        GspData();
         initWidget();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -494,7 +499,6 @@ public class PhotoActivity extends Activity {
        gpsData data = new gpsData();
         String itemcode = data.getItemcode();
         String itemname = data.getItemname();
-        String unitcode = data.getUnitcode();
         String longitudeIP = gpsData.getLongitude();
         String latitudeIP = gpsData.getLatitude();
         final SelectData selectData = new SelectData();
@@ -596,7 +600,6 @@ public class PhotoActivity extends Activity {
     /**
      * 获取GPS定位
      */
-    @SuppressLint("MissingPermission")
     public void GspData() {
         final LocationManager locationManager;
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -604,6 +607,16 @@ public class PhotoActivity extends Activity {
         @SuppressLint("MissingPermission") Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         //使用location 来更新EditText的显示
         updateView(location);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 8, new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -640,20 +653,26 @@ public class PhotoActivity extends Activity {
 
         });
     }
-     public void updateView(Location newLocation){
-            if (newLocation!=null){
-                StringBuffer sb = new StringBuffer();
-                sb.append("实时的位置信息：\n");
-                sb.append("\n经度");
-                sb.append(newLocation.getLongitude());
-                sb.append("\n纬度：");
-                sb.append(newLocation.getLatitude());
-                Log.i(TAG,"经度:"+newLocation.getLongitude());
-                Log.i(TAG,"纬度:"+newLocation.getLatitude());
-                longitude = newLocation.getLongitude();
-                latitude  = newLocation.getLatitude();
+
+    public void updateView(Location newLocation) {
+        if (newLocation != null) {
+            StringBuffer sb = new StringBuffer();
+            sb.append("实时的位置信息：\n");
+            sb.append("\n经度");
+            sb.append(newLocation.getLongitude());
+            sb.append("\n纬度：");
+            sb.append(newLocation.getLatitude());
+            Log.i(ContentValues.TAG, "经度:" + newLocation.getLongitude());
+            Log.i(ContentValues.TAG, "纬度:" + newLocation.getLatitude());
+            try {
+                longitude = newLocation.getLongitude() ;
+                latitude = newLocation.getLatitude() ;
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "定位获取错误", Toast.LENGTH_LONG).show();
             }
         }
+    }
 
     public class  SpostHttpMapSubmit {
 //        String path = "http://192.168.137.1:8090/element-admin/picture-upload";
@@ -745,7 +764,6 @@ public class PhotoActivity extends Activity {
             }
             return SpostStatus;
         }
-
 
         public String posthttpmap2(String inspectiondata, File[] file) {
             //okhttp Post请求传输Json数据
@@ -1235,6 +1253,34 @@ public class PhotoActivity extends Activity {
             }
             return SpostStatus;
         }
+
+
+
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        handler = new Handler();
+        runnable = new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                //要做的事情
+                GspData();
+                Log.i("tag","asd"+123);
+                handler.postDelayed(this, 10000);
+            }
+        };
+        handler.postDelayed(runnable, 10000);
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("tag","123");
+        handler.removeCallbacks(runnable);
+    }
 }

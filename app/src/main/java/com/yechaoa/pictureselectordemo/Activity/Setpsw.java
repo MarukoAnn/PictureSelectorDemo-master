@@ -118,7 +118,7 @@ public class Setpsw extends Activity {
                                     final String RStus = postSidhttp(Msid,userEt.getText().toString(),newPsdEt.getText().toString());
                                     if (RStus.equals("10"))
                                     {
-                                        String url = "http://120.78.137.182/element-admin/user/logout";
+                                        String url = "http://119.23.219.22:80/element-admin/user/logout";
                                         final SelecthttpUserUtil selecthttpUserUtil = new SelecthttpUserUtil();
                                         selecthttpUserUtil.postSidhttp(Msid,url);
                                     Toast.makeText(getApplicationContext(),"修改成功", Toast.LENGTH_SHORT).show();
@@ -155,7 +155,7 @@ public class Setpsw extends Activity {
         String SidStatus = null;
         String status = "20";
         newPsword = newpsword;
-        String url = "http://123.249.28.108:8081/element-admin/user/query-self";
+        String url = "http://119.23.219.22:80/element-admin/user/query-self";
         OkHttpClient client = new OkHttpClient();
         Gson gson = new Gson();
         ResultData mdata = new ResultData();
@@ -213,7 +213,7 @@ public class Setpsw extends Activity {
 
     public String ChangePsw() {
         String mStatus =null;
-        String path = "http://120.78.137.182/element-admin/user/update-self";
+        String path = "http://119.23.219.22:80/element-admin/user/update-self";
 
         ReturnPostData data = new ReturnPostData(id,idCode,userCode,realName,userName,homeAddress,homeTelephone,organizationId,newPsword,phone,email,birthday,gender,idt,udt);
 

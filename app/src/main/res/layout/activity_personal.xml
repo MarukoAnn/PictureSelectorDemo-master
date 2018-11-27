@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff">
@@ -17,26 +18,86 @@
         android:id="@+id/relativeLayout"
         android:layout_below="@id/show_set_title"
         android:orientation="vertical">
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
             android:layout_width="match_parent"
             android:layout_marginLeft="@dimen/qb_px_10"
             android:layout_marginRight="@dimen/qb_px_10"
             android:layout_height="wrap_content"
             android:gravity="center_vertical">
+            <ImageView
+                android:id="@+id/ic_modify"
+                android:layout_width="@dimen/qb_px_30"
+                android:layout_height="@dimen/qb_px_30"
+                android:src="@drawable/ic_modify"
+                android:layout_centerVertical="true"
+                tools:ignore="ContentDescription" />
             <TextView
                 android:layout_marginLeft="@dimen/qb_px_9"
-                android:text="名字"
+                android:text="头像"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textColor="#000"
+                android:layout_toRightOf="@id/ic_modify"
+                android:textSize="@dimen/qb_px_20"
+                android:layout_centerVertical="true"
+                tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+
+            <com.yechaoa.pictureselectordemo.Util.CircleImageView
+                android:id="@+id/headerimg"
+                android:layout_width="@dimen/qb_px_40"
+                android:layout_height="@dimen/qb_px_40"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/qb_px_250"
+                android:layout_marginTop="0dp"
+                android:layout_toRightOf="@id/ic_modify"
+                android:layout_centerVertical="true"
+                app:border_color="@color/colorAccent"
+                app:border_width="@dimen/qb_px_2"
+                tools:ignore="RtlHardcoded" />
+            <ImageView
+                android:layout_width="@dimen/qb_px_40"
+                android:layout_height="@dimen/qb_px_40"
+                android:layout_toRightOf="@id/headerimg"
+                android:layout_marginLeft="@dimen/qb_px_10"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_advance"
+                tools:ignore="ContentDescription,RtlHardcoded" />
+        </RelativeLayout>
+        <TextView
+            android:layout_marginTop="@dimen/qb_px_10"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/qb_px_1"
+            android:background="#000"/>
+        <LinearLayout
+            android:layout_marginTop="@dimen/qb_px_20"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/qb_px_10"
+            android:layout_marginRight="@dimen/qb_px_10"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+            <ImageView
+                android:layout_width="@dimen/qb_px_35"
+                android:layout_height="@dimen/qb_px_35"
+                android:src="@drawable/ic_jobnumber"
+                android:contentDescription="@null" />
+            <TextView
+                android:layout_marginLeft="@dimen/qb_px_9"
+                android:text="工号"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="#000"
                 android:textSize="@dimen/qb_px_20"
                 tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
             <TextView
-                android:id="@+id/personal_name"
-                android:layout_width="wrap_content"
+                android:id="@+id/job_number"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/qb_px_30"
                 android:gravity="center"
                 android:layout_marginLeft="@dimen/qb_px_10"
+                android:textColor="#000"
                 android:layout_weight="1"
                 tools:ignore="RtlHardcoded,TextFields" />
 
@@ -44,39 +105,81 @@
         <TextView
             android:layout_marginTop="@dimen/qb_px_10"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#6b7479"/>
+            android:layout_height="@dimen/qb_px_1"
+            android:background="#000"/>
         <LinearLayout
-            android:id="@+id/linearlayout1"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/qb_px_10"
+            android:layout_marginRight="@dimen/qb_px_10"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/qb_px_20"
+            android:gravity="center_vertical">
+            <ImageView
+                android:layout_width="@dimen/qb_px_35"
+                android:layout_height="@dimen/qb_px_35"
+                android:src="@drawable/ic_person1"
+                android:contentDescription="@null" />
+            <TextView
+                android:layout_marginLeft="@dimen/qb_px_9"
+                android:text="名字"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="#000"
+                android:textSize="@dimen/qb_px_20"
+                tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+            <TextView
+                android:id="@+id/personal_name"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/qb_px_30"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/qb_px_10"
+                android:textColor="#000"
+                android:layout_weight="1"
+                tools:ignore="RtlHardcoded,TextFields" />
+
+        </LinearLayout>
+        <TextView
+            android:layout_marginTop="@dimen/qb_px_10"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/qb_px_1"
+            android:background="#000"/>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/qb_px_10"
             android:layout_marginRight="@dimen/qb_px_10"
             android:layout_marginTop="@dimen/qb_px_20"
             android:gravity="center_vertical">
-
+            <ImageView
+                android:layout_width="@dimen/qb_px_35"
+                android:layout_height="@dimen/qb_px_35"
+                android:src="@drawable/ic_idnumber"
+                android:contentDescription="@null" />
             <TextView
-                android:layout_marginLeft="9dp"
+                android:layout_marginLeft="@dimen/qb_px_9"
                 android:text="身份证号"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textSize="@dimen/qb_px_20"
-                tools:ignore="HardcodedText,RtlHardcoded" />
+                android:textColor="#000"
+                tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
             <TextView
                 android:layout_marginLeft="@dimen/qb_px_5"
                 android:id="@+id/personal_idnum"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/qb_px_30"
                 android:gravity="center"
+                android:textColor="#000"
                 android:layout_weight="1"
                 tools:ignore="RtlHardcoded" />
         </LinearLayout>
         <TextView
             android:layout_marginTop="@dimen/qb_px_10"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#6b7479"/>
+            android:layout_height="@dimen/qb_px_1"
+            android:background="#000"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,34 +187,34 @@
             android:layout_marginLeft="@dimen/qb_px_10"
             android:layout_marginRight="@dimen/qb_px_10"
             android:gravity="center_vertical">
+            <ImageView
+                android:layout_width="@dimen/qb_px_35"
+                android:layout_height="@dimen/qb_px_35"
+                android:src="@drawable/ic_phone"
+                android:contentDescription="@null" />
             <TextView
                 android:layout_marginLeft="@dimen/qb_px_9"
                 android:text="电话"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#000"
                 android:textSize="@dimen/qb_px_20"
                 android:gravity="center"
                 tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
-
             <TextView
-                android:id="@+id/personal_phone"
-                android:layout_width="@dimen/qb_px_298"
-                android:layout_height="@dimen/qb_px_30"
                 android:layout_marginLeft="@dimen/qb_px_5"
-                android:layout_weight="2"
+                android:id="@+id/personal_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/qb_px_30"
                 android:gravity="center"
+                android:textColor="#000"
+                android:layout_weight="1"
                 tools:ignore="InefficientWeight,RtlHardcoded,TextFields" />
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:gravity="right"-->
-                <!--android:layout_weight="1"-->
-                <!--android:text=">"/>-->
         </LinearLayout>
         <TextView
             android:layout_marginTop="@dimen/qb_px_10"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#6b7479"/>
+            android:layout_height="@dimen/qb_px_1"
+            android:background="#000"/>
     </LinearLayout>
 </RelativeLayout>
