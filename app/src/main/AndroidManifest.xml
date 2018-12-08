@@ -29,7 +29,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activity.LaunchActivity" android:theme="@style/ImageTranslucentTheme">
+        <activity android:name=".Activity.LaunchActivity" android:theme="@style/ImageTranslucentTheme"
+            tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -40,11 +41,6 @@
             tools:ignore="InnerclassSeparator" android:theme="@style/ImageTranslucentTheme" />
         <activity android:name=".Activity.MainActivity"
             tools:ignore="InnerclassSeparator" >
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN"/>-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-            <!--</intent-filter>-->
         </activity>
         <activity android:name=".Activity.LoginActivity" android:theme="@style/ImageTranslucentTheme"
             tools:ignore="InnerclassSeparator" />
