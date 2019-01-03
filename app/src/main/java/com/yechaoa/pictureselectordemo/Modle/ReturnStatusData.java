@@ -6,7 +6,9 @@ package com.yechaoa.pictureselectordemo.Modle;
 
 public class ReturnStatusData {
     private String status;
-    private String sid;
+    private String  sid;
+    private String SurplusNum;
+    private String  systemInfo;
 
     public String getStatus() {
         return status;
@@ -24,5 +26,21 @@ public class ReturnStatusData {
     public String setSid(String sid) {
         this.sid = sid;
         return sid;
+    }
+
+    public String getSurplusNum() {
+        return SurplusNum;
+    }
+
+    public void setSurplusNum(String surplusNum) {
+        SurplusNum = surplusNum;
+    }
+
+    public String getSystemInfo() {
+        return systemInfo;
+    }
+
+    public void setSystemInfo(String systemInfo) {
+        this.systemInfo = systemInfo;
     }
 }

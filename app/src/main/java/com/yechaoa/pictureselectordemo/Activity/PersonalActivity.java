@@ -278,4 +278,9 @@ public class PersonalActivity extends Activity {
             pop = null;
         }
     }
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.down_in, R.anim.down_out);
+    }
 }

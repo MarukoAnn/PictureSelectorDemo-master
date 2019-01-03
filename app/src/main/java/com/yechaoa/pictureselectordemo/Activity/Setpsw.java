@@ -21,6 +21,7 @@ import com.yechaoa.pictureselectordemo.Modle.ReturnStatusData;
 import com.yechaoa.pictureselectordemo.Modle.SidSelectData;
 import com.yechaoa.pictureselectordemo.Util.DataDBHepler;
 import com.yechaoa.pictureselectordemo.R;
+import com.yechaoa.pictureselectordemo.Util.SavePamasInfo;
 import com.yechaoa.pictureselectordemo.Util.SelecthttpUserUtil;
 import com.google.gson.Gson;
 
@@ -41,43 +42,40 @@ import static android.content.ContentValues.TAG;
 
 public class Setpsw extends Activity {
 
-    private String id =null;
-    private String userCode =null;
-    private String idCode =null;
-    private String realName =null;
-    private String userName =null;
-    private String homeAddress =null;
-    private String homeTelephone =null;
-    private String organizationId =null;
-    private String password =null;
-    private String phone =null;
-    private String email =null;
-    private String birthday =null;
-    private String gender =null;
-    private String idt =null;
-    private String udt =null;
-    private String newPsword =null;
+    private String id;
+    private String userCode;
+    private String idCode;
+    private String realName;
+    private String userName;
+    private String homeAddress;
+    private String homeTelephone;
+    private String organizationId;
+    private String password;
+    private String phone;
+    private String email;
+    private String birthday;
+    private String gender;
+    private String idt;
+    private String udt;
+    private String newPsword;
+    private String sysids;
 
-    EditText userEt;
-    EditText oldPsdEt;
-    EditText newPsdEt;
+    EditText user;
+    EditText oldPsd;
+    EditText newPsd;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setpaw);
         intView();
-        /**
-         * 设置状态栏的颜色
-         *
-         */
         UltimateBar.newColorBuilder()
-                .statusColor(Color.parseColor("#000000"))       // 状态栏颜色
-                .statusDepth(30)                // 状态栏颜色深度
+                .statusColor(Color.parseColor("#16abd9"))       // 状态栏颜色
+                .statusDepth(50)                // 状态栏颜色深度
                 .build(this)
                 .apply();
 
-        ImageView imageView = (ImageView) findViewById(R.id.returnview);
+        ImageView imageView = findViewById(R.id.returnview);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,10 +94,11 @@ public class Setpsw extends Activity {
         ArrayList<SidSelectData> DataList = dataDBHepler.FindSidData();
         final SidSelectData data = new SidSelectData(DataList.get(0).getId(),DataList.get(0).getSid());
         Log.i(TAG,"数据库的sid为："+data.getSid());
+        SavePamasInfo savePamasInfo = new SavePamasInfo();
+        sysids =savePamasInfo.getInfo(getBaseContext(),"sysid","login").replace("[","").replace("]","");
+        Log.i("tag","sysid:"+sysids);
         final String Msid = data.getSid();
-
-
-        Button btn = (Button) findViewById(R.id.setpsw_btn);
+        Button btn = findViewById(R.id.setpsw_btn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,33 +106,34 @@ public class Setpsw extends Activity {
                     @Override
                     public void run() {
                         Looper.prepare();
-                          try {
-                              if(TextUtils.isEmpty(userEt.getText().toString().trim())|| TextUtils.isEmpty(oldPsdEt.getText().toString().trim())||TextUtils.isEmpty(newPsdEt.getText().toString().trim())){
+                        try {
+                            if(user.getText().toString().equals("") || oldPsd.getText().toString().equals("") ||newPsd.getText().toString().equals("")){
 
-                                  Toast.makeText(getApplication(),"密码不能为空", Toast.LENGTH_SHORT).show();
-                              }else if (!oldPsdEt.getText().toString().equals(newPsdEt.getText().toString())){
-                                  Toast.makeText(getApplication(),"两次新密码输入不一致", Toast.LENGTH_SHORT).show();
-                              }
-                              else {
-                                    final String RStus = postSidhttp(Msid,userEt.getText().toString(),newPsdEt.getText().toString());
-                                    if (RStus.equals("10"))
-                                    {
-                                        String url = "http://119.23.219.22:80/element-admin/user/logout";
-                                        final SelecthttpUserUtil selecthttpUserUtil = new SelecthttpUserUtil();
-                                        selecthttpUserUtil.postSidhttp(Msid,url);
-                                    Toast.makeText(getApplicationContext(),"修改成功", Toast.LENGTH_SHORT).show();
-                                    dataDBHepler.delete("1");
+                                Toast.makeText(getApplication(),"密码不能为空",Toast.LENGTH_SHORT).show();
+                            }else if (!oldPsd.getText().toString().equals(newPsd.getText().toString())){
+                                Toast.makeText(getApplication(),"两次新密码输入不一致",Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                final String RStus = postSidhttp(Msid,user.getText().toString(),newPsd.getText().toString());
+                                if (RStus.equals("10"))
+                                {
+                                    String logoutUrl = "http://119.23.219.22:80/element-admin/user/logout";
+                                    final SelecthttpUserUtil selecthttpUserUtil = new SelecthttpUserUtil();
+                                    selecthttpUserUtil.postSidhttp(Msid,logoutUrl);
+                                    Toast.makeText(getApplicationContext(),"修改成功",Toast.LENGTH_SHORT).show();
                                     Intent t = new Intent(Setpsw.this,LaunchActivity.class);
+                                    dataDBHepler.delete("1");
                                     startActivity(t);
-                                    }
-                                    else if(RStus.equals("20"))
-                                    {
-                                        Toast.makeText(getApplicationContext(),"用户名或密码错误输入错误", Toast.LENGTH_SHORT).show();
-                                    }
-                                    else {
-                                        Toast.makeText(getApplicationContext(),"服务器故障", Toast.LENGTH_SHORT).show();
-                                    }
-                              }
+                                    finish();
+                                }
+                                else if(RStus.equals("20"))
+                                {
+                                    Toast.makeText(getApplicationContext(),"用户名或密码错误输入错误",Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    Toast.makeText(getApplicationContext(),"服务器故障",Toast.LENGTH_SHORT).show();
+                                }
+                            }
                         }catch (Exception e)
                         {
                             e.printStackTrace();
@@ -146,16 +146,16 @@ public class Setpsw extends Activity {
     }
 
     public void intView(){
-        userEt = (EditText) findViewById(R.id.set_oldpsw);
-        oldPsdEt = (EditText) findViewById(R.id.set_newpsw);
-        newPsdEt = (EditText) findViewById(R.id.set_sureSetpsw);
+        user = findViewById(R.id.set_oldpsw);
+        oldPsd = findViewById(R.id.set_newpsw);
+        newPsd = findViewById(R.id.set_sureSetpsw);
     }
 
     public String postSidhttp(String Sid, String oldpsword, String newpsword) {
-        String SidStatus = null;
-        String status = "20";
+        String  SidStatus = null;
+        String  status = "20";
         newPsword = newpsword;
-        String url = "http://119.23.219.22:80/element-admin/user/query-self";
+        String queryUrl = "http://119.23.219.22:80/element-admin/user/query-self";
         OkHttpClient client = new OkHttpClient();
         Gson gson = new Gson();
         ResultData mdata = new ResultData();
@@ -168,7 +168,7 @@ public class Setpsw extends Activity {
 
         RequestBody requestBody = RequestBody.create(mediaType, json);//放进requestBoday中
         Request request = new Request.Builder()
-                .url(url)
+                .url(queryUrl)
                 .post(requestBody)
                 .build();
         try {
@@ -200,12 +200,11 @@ public class Setpsw extends Activity {
             e.printStackTrace();
         }
         if (oldpsword.equals(password)) {
-            Log.i(TAG, "修改成功");
             SidStatus = ChangePsw();
             Log.i(TAG,"修改的密码返回值"+SidStatus);
             return SidStatus;
         } else {
-            Toast.makeText(getApplicationContext(),"密码输入错误", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"密码输入错误",Toast.LENGTH_SHORT).show();
             Log.i(TAG, "用户名或密码错误");
             return status;
         }
@@ -213,9 +212,9 @@ public class Setpsw extends Activity {
 
     public String ChangePsw() {
         String mStatus =null;
-        String path = "http://119.23.219.22:80/element-admin/user/update-self";
+        String updateUrl = "http://119.23.219.22:80/element-admin/user/update-self";
 
-        ReturnPostData data = new ReturnPostData(id,idCode,userCode,realName,userName,homeAddress,homeTelephone,organizationId,newPsword,phone,email,birthday,gender,idt,udt);
+        ReturnPostData data = new ReturnPostData(id,idCode,userCode,realName,userName,homeAddress,homeTelephone,organizationId,newPsword,phone,email,birthday,gender,idt,udt,sysids);
 
         OkHttpClient client = new OkHttpClient();
         Gson gson = new Gson();
@@ -226,18 +225,22 @@ public class Setpsw extends Activity {
 
         RequestBody requestBody = RequestBody.create(mediaType, json);//放进requestBoday中
         Request request = new Request.Builder()
-                .url(path)
+                .url(updateUrl)
                 .post(requestBody)
                 .build();
         try {
             Response response = client.newCall(request).execute();
             String result = response.body().string();
-
             ReturnStatusData returnStatusData= gson.fromJson(result,ReturnStatusData.class);
             mStatus = returnStatusData.getStatus();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return mStatus;
+    }
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.down_in, R.anim.down_out);
     }
 }

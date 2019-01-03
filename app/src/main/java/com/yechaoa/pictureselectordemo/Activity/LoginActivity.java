@@ -18,17 +18,21 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.github.zackratos.ultimatebar.UltimateBar;
+import com.google.gson.reflect.TypeToken;
 import com.yechaoa.pictureselectordemo.Modle.LoginData;
 import com.yechaoa.pictureselectordemo.Modle.ReturnStatusData;
+import com.yechaoa.pictureselectordemo.Modle.SysInfoData;
 import com.yechaoa.pictureselectordemo.Modle.UserpassData;
 import com.yechaoa.pictureselectordemo.Util.DataDBHepler;
 import com.yechaoa.pictureselectordemo.R;
 import com.yechaoa.pictureselectordemo.Util.DownloadUtil;
+import com.yechaoa.pictureselectordemo.Util.SavePamasInfo;
 import com.yechaoa.pictureselectordemo.Util.UpdateDialog;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -48,15 +52,16 @@ public class LoginActivity extends Activity {
 
     private DownloadUtil downloadUtils;
 
-    String url;
-    EditText usernameEt;
-    EditText passwordEt;
-        Button loginBtn;
-    String path = "http://119.23.219.22:80/element-admin/user/login";
-    DataDBHepler dbHepler;
-    String result;
-    String Username;
-    String Password;
+    String        url;
+    EditText      usernameEt;
+    EditText      passwordEt;
+        Button    loginBtn;
+    String        path           = "http://119.23.219.22:80/element-admin/user/login";
+    DataDBHepler  dbHepler;
+    String        result;
+    String        Username;
+    String        Password;
+    SavePamasInfo mSavePamasInfo = new SavePamasInfo();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -226,18 +231,26 @@ public class LoginActivity extends Activity {
         try {
             Response response = client.newCall(request).execute();
             String result = response.body().string();
-            ReturnStatusData resultStatusData= gson.fromJson(result,ReturnStatusData.class);
+            ReturnStatusData resultStatusData = gson.fromJson(result, ReturnStatusData.class);
             String postSid = resultStatusData.getSid();
-
-            Log.i(TAG,"SID为"+postSid);
-            if (dbHepler.isIdorSid()){
+            String resultSysInfo = resultStatusData.getSystemInfo();
+            List<SysInfoData> sysInfoData = gson.fromJson(resultSysInfo, new TypeToken<List<SysInfoData>>() {
+            }.getType());
+            Log.i(TAG, "SID为" + postSid);
+            List sysId = new ArrayList<>();
+            List sysname = new ArrayList<>();
+            for (int i = 0; i < sysInfoData.size(); i++) {
+                sysId.add(sysInfoData.get(i).getSysId());
+                sysname.add(sysInfoData.get(i).getSysName());
+                Log.i("tag", "sysid：" + sysInfoData.get(i).getSysId());
+            }mSavePamasInfo.saveInfo(this, "sysid", String.valueOf(sysId).replace("[", "").replace("]", ""), "login");
+            if (dbHepler.isIdorSid()) {
                 dbHepler.update(postSid);
+            } else {
+                dbHepler.add("1", postSid);
             }
-            else {
-                dbHepler.add("1",postSid);
-            }
-            postStatus= resultStatusData.getStatus();
-        } catch (IOException e) {
+            postStatus = resultStatusData.getStatus();
+        }catch  (IOException e) {
             e.printStackTrace();
         }
         return postStatus;

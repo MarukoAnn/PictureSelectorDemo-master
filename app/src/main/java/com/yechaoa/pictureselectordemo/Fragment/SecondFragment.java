@@ -67,6 +67,7 @@ public class SecondFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(),Setpsw.class));
+                getActivity().overridePendingTransition(R.anim.up_in, R.anim.up_out);
             }
         });
         TextView tv1=(TextView) view.findViewById(R.id.pensonal);
@@ -74,6 +75,7 @@ public class SecondFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(),PersonalActivity.class));
+                getActivity().overridePendingTransition(R.anim.up_in, R.anim.up_out);
             }
         });
         TextView textView = (TextView) view.findViewById(R.id.we);
@@ -81,6 +83,7 @@ public class SecondFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(),BbenActivity.class));
+                getActivity().overridePendingTransition(R.anim.up_in, R.anim.up_out);
             }
         });
         tv_userCode = view.findViewById(R.id.userCode);

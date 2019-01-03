@@ -37,5 +37,9 @@ public class BbenActivity extends Activity {
             }
         });
     }
-
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.down_in, R.anim.down_out);
+    }
 }

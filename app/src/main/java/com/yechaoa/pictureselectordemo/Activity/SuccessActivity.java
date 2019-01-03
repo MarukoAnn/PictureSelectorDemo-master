@@ -51,5 +51,9 @@ public class SuccessActivity extends Activity {
 //        }
 //        return super.onKeyDown(keyCode, event);
 //    }
-
+@Override
+public void finish() {
+    super.finish();
+    overridePendingTransition(R.anim.down_in, R.anim.down_out);
+}
 }

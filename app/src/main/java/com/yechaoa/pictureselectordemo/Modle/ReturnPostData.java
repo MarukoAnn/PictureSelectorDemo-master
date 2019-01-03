@@ -20,11 +20,12 @@ public class ReturnPostData {
     private String gender;
     private String idt;
     private String udt;
+    private String sysids;
 
-    public ReturnPostData(String id, String userCode, String idCode, String realName,
-                          String userName, String homeAddress, String homeTelephone,
-                          String organizationId, String password, String phone,
-                          String email, String birthday, String gender, String idt, String udt){
+    public ReturnPostData( String id,String userCode,String idCode,String realName,
+                           String userName,String homeAddress,String homeTelephone,
+                           String organizationId,String password, String phone,
+                           String email,String birthday,String gender,String idt,String udt,String sysids){
         super();
         this.id = id;
         this.userCode = userCode;
@@ -41,6 +42,7 @@ public class ReturnPostData {
         this.organizationId = organizationId;
         this.phone = phone;
         this.udt = udt;
+        this.sysids =sysids;
     }
 
     public String getId() {
@@ -161,5 +163,13 @@ public class ReturnPostData {
 
     public void setUdt(String udt) {
         this.udt = udt;
+    }
+
+    public String getSysids() {
+        return sysids;
+    }
+
+    public void setSysids(String sysids) {
+        this.sysids = sysids;
     }
 }
